@@ -3,6 +3,8 @@ import notmuch2
 import re
 from email.parser import Parser
 from bs4 import BeautifulSoup
+import os
+
 
 def process_mail(message):
 
@@ -31,7 +33,8 @@ def process_mail(message):
 
 def gather_data():
     try:
-        db = notmuch2.Database(mode = notmuch2.Database.MODE.READ_WRITE)
+        db_path = os.getenv("NOTMUCH_DATABASE_PATH")
+        db = notmuch2.Database(path=db_path, mode = notmuch2.Database.MODE.READ_WRITE)
         notifications = db.messages("from:notificacion@notificacionesbaccr.com and not tag:ready")
         data = []
 

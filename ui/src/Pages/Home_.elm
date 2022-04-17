@@ -1,23 +1,20 @@
 module Pages.Home_ exposing (view)
 
-import Array
 import GraphQLClient exposing (makeGraphQLQuery)
-import Graphql.Http
+import RemoteData exposing (RemoteData)
+import Graphql.Http 
 import Graphql.Operation exposing (RootQuery)
 import Graphql.OptionalArgument as OptionalArgument exposing (OptionalArgument(..))
 import Graphql.SelectionSet as SelectionSet exposing (SelectionSet)
 import TrackingExpenses.Enum.Order_by exposing (Order_by(..))
 import TrackingExpenses.InputObject
     exposing
-        ( Expenses_bac_credomatic_bool_exp
-        , Expenses_bac_credomatic_order_by
-        , buildExpenses_bac_credomatic_bool_exp
+        ( Expenses_bac_credomatic_order_by
         , buildExpenses_bac_credomatic_order_by
         )   
 import TrackingExpenses.Object
 import TrackingExpenses.Object.Expenses_bac_credomatic as Expenses
 import TrackingExpenses.Query as Query exposing (ExpensesBacCredomaticOptionalArguments)
-
 
 
 
@@ -50,6 +47,10 @@ type alias Gasto =
     , currency: String
     , commerce: String
     }
+
+type alias GastoData =
+    RemoteData (Graphql.Http.Error Gasto ) Gasto
+    
 
 
 selectExpense: SelectionSet Gasto TrackingExpenses.Object.Expenses_bac_credomatic
