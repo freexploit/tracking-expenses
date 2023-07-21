@@ -16,7 +16,7 @@
           tracking-expenses =
             final.haskell-nix.project' {
               src = ./.;
-              compiler-nix-name = "ghc927";
+              compiler-nix-name = "ghc944";
               # This is used by `nix develop .` to open a shell for use with
               # `cabal`, `hlint` and `haskell-language-server`
               shell.tools = {
@@ -26,7 +26,7 @@
               };
               # Non-Haskell shell tools go here
               shell.buildInputs = with pkgs; [
-                nixpkgs-fmt stylish-haskell
+                nixpkgs-fmt
               ];
               # This adds `js-unknown-ghcjs-cabal` to the shell.
               # shell.crossPlatforms = p: [p.ghcjs];
