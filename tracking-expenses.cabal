@@ -4,7 +4,6 @@ version:            0.1.0.0
 -- synopsis:
 -- description:
 license:            GPL-3.0-only
-license-file:       LICENSE
 author:             Christopher Valerio
 maintainer:         test@test.com
 -- copyright:
@@ -20,6 +19,10 @@ executable tracking-expenses
     main-is:          Main.hs
     -- other-modules:
     -- other-extensions:
-    build-depends:    base >=4.7
+    build-depends:    
+        base >=4.8
+        , HaskellNet
+        , HaskellNet-SSL
+        , bytestring
     hs-source-dirs:   app
     default-language: Haskell2010

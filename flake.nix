@@ -16,18 +16,18 @@
           tracking-expenses =
             final.haskell-nix.project' {
               src = ./.;
-              compiler-nix-name = "ghc945";
+              compiler-nix-name = "ghc928";
               # This is used by `nix develop .` to open a shell for use with
               # `cabal`, `hlint` and `haskell-language-server`
               shell.tools = {
                 cabal = {};
                 hlint = {};
-                #haskell-language-server = {};
+                haskell-language-server = {};
               };
               # Non-Haskell shell tools go here
-              #shell.buildInputs = with pkgs; [
-              #  nixpkgs-fmt 
-              #];
+              shell.buildInputs = with pkgs; [
+                nixpkgs-fmt arion 
+              ];
               # This adds `js-unknown-ghcjs-cabal` to the shell.
               # shell.crossPlatforms = p: [p.ghcjs];
             };
@@ -40,7 +40,7 @@
       # Built by `nix build .`
       packages.default = flake.packages."tracking-expenses:exe:tracking-expenses";
       devShell = pkgs.haskellPackages.shellFor {
-        buildInputs = with pkgs.haskellPackages; [ cabal-install ormolu haskell-language-server ];
+        buildInputs = with pkgs.haskellPackages; [ cabal-install ormolu  ];
         withHoogle = true;
       };
     });
