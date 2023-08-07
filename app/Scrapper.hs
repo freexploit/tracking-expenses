@@ -54,7 +54,7 @@ proccesHtml s = do
         --let tags =   take 1 . dropWhile ( ~/=  ("</p>":: [Char]) ) $ parseTags s
         let tags = parseTags $ toString s
         let dd = map ( parseRow . takeWhile (~/= ("</tr>"::[Char]))) . sections (~== ("<tr>"::[Char]))  $ tags
-        let expenses = map (\fun -> filter fun dd) filterer
+        let expenses = map (`filter` dd) filterer
         print $ show expenses
         return ()
     where
@@ -67,11 +67,4 @@ intersperseNotBroken sep (x:xs) = x : is xs
     where
         is [] = []
         is (y:ys) = sep : y : is ys
-
-
-
-    
-
-
-
 
