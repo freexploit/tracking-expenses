@@ -17,12 +17,21 @@ common warnings
 executable tracking-expenses
     import:           warnings
     main-is:          Main.hs
-    -- other-modules:
-    -- other-extensions:
+    other-modules:
+        Scrapper
+
+    -- other-extensions: 
     build-depends:    
         base >=4.8
         , HaskellNet
         , HaskellNet-SSL
         , bytestring
+        , purebred-email
+        , generic-lens
+        , lens
+        , old-time
+        , time
+        , tagsoup
+        , transformers
     hs-source-dirs:   app
     default-language: Haskell2010

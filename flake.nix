@@ -40,7 +40,7 @@
       # Built by `nix build .`
       packages.default = flake.packages."tracking-expenses:exe:tracking-expenses";
       devShell = pkgs.haskellPackages.shellFor {
-        buildInputs = with pkgs.haskellPackages; [ cabal-install ormolu  ];
+        buildInputs = with pkgs.haskellPackages; [ cabal-install ormolu  haskell-language-server ];
         withHoogle = true;
       };
     });
