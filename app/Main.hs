@@ -1,19 +1,23 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE BlockArguments #-}
 
-import Scrapper (proccesHtml)
+import Scrapper (proccesHtml, parseExpense)
 
-import Network.HaskellNet.IMAP.SSL
-    ( fetch,
+import Flow
+import Network.HaskellNet.IMAP (
+      fetch,
       list,
       login,
       logout,
       search,
       select,
+      SearchQuery(..))
+
+import Network.HaskellNet.IMAP.SSL
+    (
       connectIMAPSSLWithSettings,
       defaultSettingsIMAPSSL,
-      SearchQuery(..),
-      Settings(sslMaxLineLength))
+      Settings(sslMaxLineLength), connectIMAP)
 
 import qualified Data.ByteString.Char8 as B
 import Control.Monad ( forM_, forM )
@@ -50,7 +54,7 @@ daysAgo  = do
     --let calendarTimeNow = toUTCTime' now
 
     -- Create a TimeDiff for 2 days
-    let twoDays = noTimeDiff { tdDay = 2 }
+    let twoDays = noTimeDiff { tdDay = 1 }
 
     -- Get the time for 2 days ago
     let twoDaysAgoClock = addToClockTime (negateTimeDiff twoDays) now
@@ -76,16 +80,20 @@ connectServer = do
 
     mails <- forM msgs \msg -> do
               msgContent <- fetch c msg
-              let p =  firstOf (entities . filtered isHtml . body) <$> parseMail msgContent
+              let p =  firstOf (entities <. filtered isHtml <. body) <$> parseMail msgContent
               return p
 
     forM_ mails \m -> do
             case m of
               Right t  -> do
-                  mapM_ proccesHtml t 
+                  let stuff = proccesHtml <$> t
+                  print stuff
+                  let expenses =  parseExpense <$> stuff 
+                  print expenses
+
               Left err -> do
                   B.putStrLn "Error bro"
-                  B.putStrLn $ B.fromString err
+                  B.putStrLn <| B.fromString err
 
     logout c
   where
@@ -93,4 +101,4 @@ connectServer = do
 
 
 main :: IO ()
-main = connectServer 
+main = connectServer
