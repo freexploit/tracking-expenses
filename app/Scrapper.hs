@@ -5,7 +5,7 @@
 
 module Scrapper (proccesHtml, parseExpense) where
 
-import Flow 
+import Flow
 import Text.HTML.TagSoup
 import qualified Data.ByteString.Char8 as B
 import Text.StringLike (toString)
@@ -13,7 +13,6 @@ import Data.List
 import Data.Time
 import Text.Read (readMaybe)
 import Text.Regex.TDFA
-import Data.Maybe (fromJust, fromMaybe)
 
 
 data CardType = VISA
@@ -30,7 +29,7 @@ fromStringCardType s = case s of
   "ATM" -> Just ATM
   _ -> Nothing
 
-data Expense = Expense 
+data Expense = Expense
     {   commerce :: Maybe  B.ByteString,
         location :: Maybe B.ByteString,
         currency ::Maybe  B.ByteString,
@@ -53,40 +52,47 @@ parseRow = map (innerText <. takeWhile (~/= ("</td>":: [Char]))) <. sections (~=
 --compose fs xs = all (\f -> f xs) fs
 
 createCompose :: [String] -> [ [String] -> Bool ]
-createCompose = map containsSubstring  
+createCompose = map containsSubstring
 
 filterer :: [[String] -> Bool]
-filterer = createCompose ["Comercio"::String, "Ciudad"::String, "Monto"::String, "AMEX"::String, "VISA"::String, "MASTER"::String, "ATM"::String  ]
+filterer = createCompose ["Comercio"::String, "Ciudad"::String, "Monto"::String, "Fecha":: String, "AMEX"::String, "VISA"::String, "MASTER"::String, "ATM"::String  ]
 
 remover :: [[[Char]]] -> [[[Char]]]
 remover = map (map (filter (`notElem` ("\r\n"::[Char])) ))
 
 proccesHtml :: B.ByteString -> [[String]]
-proccesHtml s = 
+proccesHtml s =
         toString s |> parseTags
-        |> map ( parseRow <. takeWhile (~/= ("</tr>"::[Char]))) <. sections (~== ("<tr>"::[Char]))  
+        |> map ( parseRow <. takeWhile (~/= ("</tr>"::[Char]))) <. sections (~== ("<tr>"::[Char]))
         |> remover
         |> flip filter
-        |> flip map filterer 
+        |> flip map filterer
         |> filter (not . null)
         |> map head
 
+
+parseDate :: String -> Maybe UTCTime
+parseDate input = do
+    utcDate <- parseTimeM True defaultTimeLocale "%b %d, %Y, %H:%M" input
+    let sixHours = 6 * 60 * 60
+    return $ addUTCTime sixHours utcDate
 
 parseExpense :: [[String]] -> Maybe Expense
 parseExpense xs = do
   let commerce' = head <. tail <$> find ((== "Comercio:") <. head ) xs
   let location' = concat .tail <$> find ((=~ ("Ciudad.*"::String) ) <. head ) xs
+  fecha <- head <. tail <$> find ((== "Fecha:") <. head ) xs
   monto <- head <. tail <$> find ((== "Monto:") <. head ) xs
   let cardType = findCardType
   let currency' = B.pack <| takeWhile (/= ' ') monto
-  let amountStr= filter (/= ' ') <|  dropWhile (/= ' ') monto 
+  let amountStr= filter (/= ' ') <|  dropWhile (/= ' ') monto
   let amount' = readMaybe amountStr :: Maybe Double
   card' <- fromStringCardType <$> cardType
   let card_number' =  head <. tail <$> find (\x ->  head (tail x) =~ ("\\*+[[:digit:]]+"::String):: Bool)  xs
-  return <| Expense (B.pack <$> commerce') (B.pack <$> location') (Just currency') amount' card' (B.pack <$> card_number') Nothing
+  return <| Expense (B.pack <$> commerce') (B.pack <$> location') (Just currency') amount' card' (B.pack <$> card_number') (parseDate  fecha)
   where
     findCardType  = head <$> find (\x -> head x == "MASTER" || head x == "VISA" || head x == "AMEX" || head x == "ATM") xs
-    
+
 
 --[[["Comercio:","GITHUB"]],[["Ciudad y pa\237s:","+18774484820, Pais no Definido"]],[["Monto:","USD 3.67"]],[["MASTER","************3785"]]
 --"************3785"
