@@ -19,6 +19,7 @@ executable tracking-expenses
     main-is:          Main.hs
     other-modules:
         Scrapper
+        Env
 
     -- other-extensions: 
     build-depends:    

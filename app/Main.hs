@@ -2,6 +2,7 @@
 {-# LANGUAGE BlockArguments #-}
 
 import Scrapper (proccesHtml, parseExpense)
+import Env (Env, getterEnv, env)
 
 import Flow
 import Network.HaskellNet.IMAP (
@@ -27,11 +28,12 @@ import Control.Lens (view, filtered)
 import Control.Lens.Combinators (firstOf)
 import qualified Data.String as B
 import System.Time
+import Data.Maybe (fromJust)
 
-username :: [Char]
-username = "test@test.com"
-password :: [Char]
-password = "@$%kW4CuDfpTQqY8wbN7NPhY"
+username :: Env String
+username = env "EMAIL"
+password :: Env String
+password = env "IMAP_PASS"
 
 
 getCurrentDay :: IO CalendarTime
@@ -70,9 +72,11 @@ isHtml = matchContentType "text" (Just "html") . view contentType
 connectServer :: IO ()
 connectServer = do
 
+    u <- getterEnv username 
+    p <- getterEnv password 
     day <- daysAgo
     c <- connectIMAPSSLWithSettings "imap.kolabnow.com" cfg
-    login c username password
+    login c (fromJust u) (fromJust p)
     _ <- list c
     select c "INBOX"
     msgs <- search c [FROMs "notificacion@notificacionesbaccr.com", SINCEs day]
