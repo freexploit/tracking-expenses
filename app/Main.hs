@@ -33,7 +33,7 @@ import Data.Maybe (fromJust)
 username :: Env String
 username = env "EMAIL"
 password :: Env String
-password = env "IMAP_PASS"
+password = env "IMAP_PASSWORD"
 
 
 getCurrentDay :: IO CalendarTime
