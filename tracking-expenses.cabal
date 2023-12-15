@@ -11,6 +11,9 @@ build-type:         Simple
 extra-doc-files:    CHANGELOG.md
 -- extra-source-files:
 
+data-files:
+    assets/schema.gql
+
 common warnings
     ghc-options: -Wall
 
@@ -20,6 +23,7 @@ executable tracking-expenses
     other-modules:
         Scrapper
         Env
+        Graphql
 
     -- other-extensions: 
     build-depends:    
@@ -37,5 +41,9 @@ executable tracking-expenses
         , transformers
         , text 
         , regex-tdfa
+        , morpheus-graphql
+        , morpheus-graphql-core
+        , morpheus-graphql-subscriptions
+
     hs-source-dirs:   app
     default-language: Haskell2010

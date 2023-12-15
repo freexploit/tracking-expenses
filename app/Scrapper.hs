@@ -2,24 +2,34 @@
 {-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE TemplateHaskell  #-}
+{-# LANGUAGE DeriveGeneric #-}
 
-module Scrapper (proccesHtml, parseExpense) where
+
+
+module Scrapper  where
 
 import Flow
 import Text.HTML.TagSoup
+import           Control.Lens(makeLenses)
+import           Data.Generics.Labels    ()
 import qualified Data.ByteString.Char8 as B
 import Text.StringLike (toString)
 import Data.List
 import Data.Time
 import Text.Read (readMaybe)
 import Text.Regex.TDFA
+import GHC.Generics
+import Data.Maybe (fromMaybe)
+import Data.Char (isDigit)
 
 
 data CardType = VISA
     | MASTERCARD
     | AMEX
     | ATM
-    deriving(Show)
+    deriving(Show, Generic)
 
 fromStringCardType :: String -> Maybe CardType
 fromStringCardType s = case s of
@@ -30,33 +40,30 @@ fromStringCardType s = case s of
   _ -> Nothing
 
 data Expense = Expense
-    {   commerce :: Maybe  B.ByteString,
-        location :: Maybe B.ByteString,
-        currency ::Maybe  B.ByteString,
-        amount :: Maybe  Double,
-        card :: Maybe CardType,
-        card_number :: Maybe B.ByteString,
-        date :: Maybe UTCTime
+    {   _commerce :: Maybe  B.ByteString,
+        _location :: Maybe B.ByteString,
+        _currency ::Maybe  B.ByteString,
+        _amount :: Maybe  Double,
+        _card :: Maybe CardType,
+        _card_number :: Maybe B.ByteString,
+        _date :: Maybe UTCTime
     }
-  deriving (Show)
+  deriving (Show,Generic)
 
+makeLenses ''Expense
 
 containsSubstring :: String -> [String] -> Bool
 containsSubstring sub = any (sub `isInfixOf`)
 
 
 parseRow :: [Tag String] -> [String]
-parseRow = map (innerText <. takeWhile (~/= ("</td>":: [Char]))) <. sections (~== ("<td>"::[Char]))
-
---compose :: [[String] -> Bool] -> ([String] -> Bool)
---compose fs xs = all (\f -> f xs) fs
+parseRow = map (innerText . takeWhile (~/= ("</td>":: [Char]))) . sections (~== ("<td>"::[Char]))
 
 createCompose :: [String] -> [ [String] -> Bool ]
 createCompose = map containsSubstring
 
 filterer :: [[String] -> Bool]
-filterer = createCompose ["Comercio"::String, "Ciudad"::String, "Monto"::String, "Fecha":: String, "AMEX"::String, "VISA"::String, "MASTER"::String, "ATM"::String  ]
-
+filterer = createCompose ["Comercio"::String, "Ciudad"::String, "Monto"::String, "Fecha":: String, "AMEX"::String, "VISA"::String, "MASTER"::String, "ATM"::String]
 remover :: [[[Char]]] -> [[[Char]]]
 remover = map (map (filter (`notElem` ("\r\n"::[Char])) ))
 
@@ -80,13 +87,13 @@ parseDate input = do
 parseExpense :: [[String]] -> Maybe Expense
 parseExpense xs = do
   let commerce' = head <. tail <$> find ((== "Comercio:") <. head ) xs
-  let location' = concat .tail <$> find ((=~ ("Ciudad.*"::String) ) <. head ) xs
+  let location' = concat <. tail <$> find ((=~ ("Ciudad.*"::String) ) <. head ) xs
   fecha <- head <. tail <$> find ((== "Fecha:") <. head ) xs
   monto <- head <. tail <$> find ((== "Monto:") <. head ) xs
   let cardType = findCardType
   let currency' = B.pack <| takeWhile (/= ' ') monto
   let amountStr= filter (/= ' ') <|  dropWhile (/= ' ') monto
-  let amount' = readMaybe amountStr :: Maybe Double
+  let amount' = Just <| fromMaybe 0.0 <| readMaybe <| filter (/= ',') amountStr :: Maybe Double
   card' <- fromStringCardType <$> cardType
   let card_number' =  head <. tail <$> find (\x ->  head (tail x) =~ ("\\*+[[:digit:]]+"::String):: Bool)  xs
   return <| Expense (B.pack <$> commerce') (B.pack <$> location') (Just currency') amount' card' (B.pack <$> card_number') (parseDate  fecha)

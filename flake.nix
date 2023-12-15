@@ -13,6 +13,13 @@
       overlays = [ haskellNix.overlay
         (final: prev: {
           # This overlay adds our project to pkgs
+
+         extraPkgconfigMappings = prev.haskell-nix.extraPkgconfigMappings // {
+            # String pkgconfig-depends names are mapped to lists of Nixpkgs
+            # package names
+            "z" = [ "zlib" ];
+          };
+
           tracking-expenses =
             final.haskell-nix.project' {
               src = ./.;
@@ -26,7 +33,7 @@
               };
               # Non-Haskell shell tools go here
               shell.buildInputs = with pkgs; [
-                nixpkgs-fmt arion 
+                nixpkgs-fmt arion nodePackages.graphqurl zlib pkgconfig haskellPackages.morpheus-graphql-code-gen
               ];
               # This adds `js-unknown-ghcjs-cabal` to the shell.
               # shell.crossPlatforms = p: [p.ghcjs];

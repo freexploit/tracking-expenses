@@ -5,21 +5,8 @@ import Scrapper (proccesHtml, parseExpense)
 import Env (Env, getterEnv, env)
 
 import Flow
-import Network.HaskellNet.IMAP (
-      fetch,
-      list,
-      login,
-      logout,
-      search,
-      select,
-      SearchQuery(..))
-
+import Network.HaskellNet.IMAP 
 import Network.HaskellNet.IMAP.SSL
-    (
-      connectIMAPSSLWithSettings,
-      defaultSettingsIMAPSSL,
-      Settings(sslMaxLineLength), connectIMAP)
-
 import qualified Data.ByteString.Char8 as B
 import Control.Monad ( forM_, forM )
 import Data.IMF ( body, message, parse, HasHeaders )
@@ -29,11 +16,15 @@ import Control.Lens.Combinators (firstOf)
 import qualified Data.String as B
 import System.Time
 import Data.Maybe (fromJust)
+import Graphql
+import Data.Morpheus.Client (single)
 
 username :: Env String
 username = env "EMAIL"
 password :: Env String
 password = env "IMAP_PASSWORD"
+imapServer :: Env String
+imapServer = env "IMAP_SERVER"
 
 
 getCurrentDay :: IO CalendarTime
@@ -56,7 +47,7 @@ daysAgo  = do
     --let calendarTimeNow = toUTCTime' now
 
     -- Create a TimeDiff for 2 days
-    let twoDays = noTimeDiff { tdDay = 1 }
+    let twoDays = noTimeDiff { tdDay = 2 }
 
     -- Get the time for 2 days ago
     let twoDaysAgoClock = addToClockTime (negateTimeDiff twoDays) now
@@ -69,35 +60,57 @@ parseMail = parse (message mime)
 isHtml :: HasHeaders s => s -> Bool
 isHtml = matchContentType "text" (Just "html") . view contentType
 
+
 connectServer :: IO ()
 connectServer = do
 
-    u <- getterEnv username 
-    p <- getterEnv password 
+    u <- getterEnv username
+    p <- getterEnv password
+    s <- getterEnv imapServer
+
     day <- daysAgo
-    c <- connectIMAPSSLWithSettings "imap.kolabnow.com" cfg
+    c <- connectIMAPSSLWithSettings (fromJust s) cfg
     login c (fromJust u) (fromJust p)
     _ <- list c
     select c "INBOX"
     msgs <- search c [FROMs "notificacion@notificacionesbaccr.com", SINCEs day]
     --let firstMsg = head msgs
+        --expunge c
+
 
     mails <- forM msgs \msg -> do
               msgContent <- fetch c msg
-              let p =  firstOf (entities <. filtered isHtml <. body) <$> parseMail msgContent
-              return p
+              let p' =  firstOf (entities <. filtered isHtml <. body) <$> parseMail msgContent
+              return p'
 
-    forM_ mails \m -> do
+
+    expenses <- forM mails \m -> do
             case m of
               Right t  -> do
                   let stuff = proccesHtml <$> t
-                  print stuff
-                  let expenses =  parseExpense <$> stuff 
-                  print expenses
+                  --print stuff
+                  let expense = fromJust <| parseExpense <$> stuff
+                  --print expense
+                  return expense
 
               Left err -> do
                   B.putStrLn "Error bro"
                   B.putStrLn <| B.fromString err
+                  return Nothing
+
+    let expenses' = sequence expenses
+
+    case expenses' of
+        Just exps' -> do
+            --print exps'
+            insertExpenses exps' >>= single >>= print 
+            return ()
+        Nothing -> print ("Nothing to procces" :: String)
+
+    forM_ msgs \msg' -> do
+        copy c msg' "BAC"
+        store c msg'  <| PlusFlags [Deleted]
+
 
     logout c
   where

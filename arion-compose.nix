@@ -20,7 +20,7 @@
     };
 
   graphql-engine.service = {
-    image = "hasura/graphql-engine:v2.15.2";
+    image = "hasura/graphql-engine:v2.35.1";
     ports = ["8080:8080"];
     depends_on = ["db"];
     networks = [ "hasura" ];
