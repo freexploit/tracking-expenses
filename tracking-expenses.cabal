@@ -12,7 +12,7 @@ extra-doc-files:    CHANGELOG.md
 -- extra-source-files:
 
 data-files:
-    assets/schema.gql
+    app/Schema/schema.gql
 
 common warnings
     ghc-options: -Wall
@@ -24,6 +24,8 @@ executable tracking-expenses
         Scrapper
         Env
         Graphql
+        Schema.Schema
+        Schema.Mutation
 
     -- other-extensions: 
     build-depends:    
@@ -31,6 +33,7 @@ executable tracking-expenses
         , HaskellNet
         , HaskellNet-SSL
         , bytestring
+        , utf8-string
         , purebred-email
         , generic-lens
         , lens
@@ -41,8 +44,12 @@ executable tracking-expenses
         , transformers
         , text 
         , regex-tdfa
+        , uuid-types
+        , aeson == 2.1.2.1
         , morpheus-graphql
         , morpheus-graphql-core
+        , morpheus-graphql-client
+        , morpheus-graphql-code-gen
         , morpheus-graphql-subscriptions
 
     hs-source-dirs:   app

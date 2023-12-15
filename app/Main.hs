@@ -47,7 +47,7 @@ daysAgo  = do
     --let calendarTimeNow = toUTCTime' now
 
     -- Create a TimeDiff for 2 days
-    let twoDays = noTimeDiff { tdDay = 2 }
+    let twoDays = noTimeDiff { tdDay = 30 }
 
     -- Get the time for 2 days ago
     let twoDaysAgoClock = addToClockTime (negateTimeDiff twoDays) now
