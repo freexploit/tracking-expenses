@@ -47,7 +47,7 @@ daysAgo  = do
     --let calendarTimeNow = toUTCTime' now
 
     -- Create a TimeDiff for 2 days
-    let twoDays = noTimeDiff { tdDay = 30 }
+    let twoDays = noTimeDiff { tdHour = 4 }
 
     -- Get the time for 2 days ago
     let twoDaysAgoClock = addToClockTime (negateTimeDiff twoDays) now
@@ -70,6 +70,7 @@ connectServer = do
 
     day <- daysAgo
     c <- connectIMAPSSLWithSettings (fromJust s) cfg
+    -- TODO: Better errors
     login c (fromJust u) (fromJust p)
     _ <- list c
     select c "INBOX"

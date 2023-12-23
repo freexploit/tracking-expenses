@@ -42,10 +42,30 @@
       ];
       pkgs = import nixpkgs { inherit system overlays; inherit (haskellNix) config; };
       flake = pkgs.tracking-expenses.flake {};
+      defaultPackage = flake.packages."tracking-expenses:exe:tracking-expenses";
 
     in flake // {
       # Built by `nix build .`
-      packages.default = flake.packages."tracking-expenses:exe:tracking-expenses";
+      packages = {
+          default = defaultPackage;
+          container_image = pkgs.dockerTools.buildLayeredImage {
+              name = "tracking-expenses";
+              tag = "latest";
+              created = builtins.substring 0 8 self.lastModifiedDate;
+              contents = [
+                pkgs.dockerTools.binSh
+                pkgs.dockerTools.caCertificates
+                pkgs.dockerTools.usrBinEnv
+                pkgs.coreutils
+                pkgs.fakeNss
+                defaultPackage
+              ];
+              config = { 
+                Cmd = ["${defaultPackage}/bin/tracking-expenses"];
+              };
+            };
+      };
+
       devShell = pkgs.haskellPackages.shellFor {
         buildInputs = with pkgs.haskellPackages; [ cabal-install ormolu  haskell-language-server ];
         withHoogle = true;

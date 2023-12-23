@@ -7,18 +7,25 @@ import Control.Lens
 import Data.Morpheus.Client
   ( GQLClient,
     ResponseStream,
-    request,
+    request, withHeaders,
   )
 import Schema.Schema
 import Schema.Mutation
-import Scrapper 
+import Scrapper
 
 import qualified Scrapper as Sc
 import qualified Data.ByteString.UTF8 as U
+import qualified Data.Text as T
 
+import Env
+import Data.Maybe
+import Data.String (fromString)
 
-client :: GQLClient
-client = "http://localhost:8080/v1/graphql" 
+authToken :: Env String
+authToken = env "GRAPHQL_AUTH_TOKEN"
+
+hasuraURL :: Env String
+hasuraURL = env "GRAPHQL_URL"
 
 fromExpense :: Sc.Expense -> Expenses_bac_credomatic_insert_input
 fromExpense exp' =
@@ -34,8 +41,8 @@ fromExpense exp' =
 
 insertExpenses :: [Expense] -> IO (ResponseStream InsertExpenses)
 insertExpenses expenses = do
-    print expenses
+    env_uri <- getterEnv hasuraURL
+    env_token <- getterEnv authToken
+    let client = (fromString (fromJust env_uri) ::GQLClient) `withHeaders` [("x-hasura-admin-secret", T.pack (fromJust env_token ))]
     let ss = map fromExpense expenses
-    print ss
-    request client  InsertExpensesArgs { _data = ss }
-
+    request  client InsertExpensesArgs { _data = ss }

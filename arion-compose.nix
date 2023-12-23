@@ -29,6 +29,7 @@
           "HASURA_GRAPHQL_DATABASE_URL"= "postgresql://postgres:postgrespassword@db:5432/postgres";
           "HASURA_GRAPHQL_ENABLE_CONSOLE" = "true";
           "HASURA_GRAPHQL_DEV_MODE"= "true";
+          "HASURA_GRAPHQL_ADMIN_SECRET"= "myadminsecretkey";
           "HASURA_GRAPHQL_ENABLED_LOG_TYPES" = "startup, http-log, webhook-log, websocket-log, query-log";
         };
     };
