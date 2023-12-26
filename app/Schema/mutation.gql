@@ -1,0 +1,8 @@
+mutation InsertExpenses($data: [expenses_bac_credomatic_insert_input!]!) {
+  insert_expenses_bac_credomatic(objects: $data) {
+    returning {
+      id
+    }
+  }
+}
+

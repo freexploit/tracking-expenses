@@ -6,10 +6,10 @@ authors = ["Christopher Valerio <test@test.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 beautifulsoup4 = "^4.9.3"
 notmuch2 = "^0.1"
-gql = {extras = ["all"], version = "^3.0.0"}
+gql = {extras = ["all"], version = "^3.4.1"}
 pynvim = "^0.4.3"
 
 [tool.poetry.dev-dependencies]
