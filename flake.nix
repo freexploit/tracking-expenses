@@ -28,12 +28,11 @@
               # `cabal`, `hlint` and `haskell-language-server`
               shell.tools = {
                 cabal = {};
-                hlint = {};
                 haskell-language-server = {};
               };
               # Non-Haskell shell tools go here
               shell.buildInputs = with pkgs; [
-                nixpkgs-fmt arion nodePackages.graphqurl zlib pkgconfig haskellPackages.morpheus-graphql-code-gen
+                nixpkgs-fmt arion nodePackages.graphqurl zlib pkg-config haskellPackages.morpheus-graphql-code-gen
               ];
               # This adds `js-unknown-ghcjs-cabal` to the shell.
               # shell.crossPlatforms = p: [p.ghcjs];
@@ -61,13 +60,18 @@
                 defaultPackage
               ];
               config = { 
+                Labels = {
+                    "org.opencontainers.image.source"="https://github.com/freexploit/tracking_expenses";
+                };
                 Cmd = ["${defaultPackage}/bin/tracking-expenses"];
               };
             };
       };
 
       devShell = pkgs.haskellPackages.shellFor {
-        buildInputs = with pkgs.haskellPackages; [ cabal-install ormolu  haskell-language-server ];
+        buildInputs = with pkgs.haskellPackages; [ 
+            cabal-install ormolu  haskell-language-server pkgs.nodejs pkgs.nodePackages.npm
+        ];
         withHoogle = true;
       };
     });
