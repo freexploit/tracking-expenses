@@ -2,7 +2,7 @@
   description = "Elm app for tracking expenses";
 
   inputs = {
-    flake-utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.92.tar.gz";
+    flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
@@ -10,7 +10,7 @@
     flake-utils.lib.eachDefaultSystem(system: 
         let 
         pkgs = import nixpkgs { inherit system; };
-        makeElmPkg = { pkgs, additionalInputs ? [ ], pythonPackages ? (ps: [ ]) }:
+        makeElmPkg = { pkgs, additionalInputs ? [ ] }:
         pkgs.stdenv.mkDerivation {
           name = "ui";
           src = ./.;
@@ -29,7 +29,6 @@
              [
               elmPackages.elm
               elmPackages.elm-land
-              elmPackages.elm-optimize-level-2
             ] ++ additionalInputs;
         };
 
@@ -48,17 +47,8 @@
                     elmPackages.elm-format
                     elmPackages.elm-land
                     elmPackages.elm
-                    elmPackages.elm-analyse
-                    elmPackages.elm-doc-preview
                     elmPackages.elm-format
-                    elmPackages.elm-live
-                    elmPackages.elm-test
-                    elmPackages.elm-upgrade
-                    elmPackages.elm-xref
                     elmPackages.elm-language-server
-                    elmPackages.elm-verify-examples
-                    elmPackages.elmi-to-json
-                    elmPackages.elm-optimize-level-2
                 ];
             };
     });

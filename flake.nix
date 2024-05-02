@@ -7,7 +7,7 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, haskellNix }:
+  outputs = { self, nixpkgs, flake-utils, haskellNix, ... }:
     flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
     let
       overlays = [ haskellNix.overlay
@@ -31,8 +31,7 @@
                 haskell-language-server = {};
               };
               # Non-Haskell shell tools go here
-              shell.buildInputs = with pkgs; [
-                nixpkgs-fmt arion nodePackages.graphqurl zlib pkg-config haskellPackages.morpheus-graphql-code-gen
+              shell.buildInputs = with pkgs; [nixpkgs-fmt arion nodePackages.graphqurl zlib pkg-config haskellPackages.morpheus-graphql-code-gen
               ];
               # This adds `js-unknown-ghcjs-cabal` to the shell.
               # shell.crossPlatforms = p: [p.ghcjs];
@@ -59,7 +58,7 @@
                 pkgs.fakeNss
                 defaultPackage
               ];
-              config = { 
+              config = {
                 Labels = {
                     "org.opencontainers.image.source"="https://github.com/freexploit/tracking_expenses";
                 };
@@ -68,30 +67,6 @@
             };
       };
 
-      devShell = pkgs.mkShell {
-        buildInputs = with pkgs.haskellPackages; [ 
-            cabal-install ormolu  haskell-language-server 
-        ] ++ [ 
-            pkgs.nodejs  
-            pkgs.nodePackages.npm 
-            pkgs.elmPackages.elm-land 
-            pkgs.elmPackages.elm-format 
-            pkgs.elm2nix
-            pkgs.elmPackages.elm
-            pkgs.elmPackages.elm-analyse
-            pkgs.elmPackages.elm-doc-preview
-            pkgs.elmPackages.elm-format
-            pkgs.elmPackages.elm-live
-            pkgs.elmPackages.elm-test
-            pkgs.elmPackages.elm-upgrade
-            pkgs.elmPackages.elm-xref
-            pkgs.elmPackages.elm-language-server
-            pkgs.elmPackages.elm-verify-examples
-            pkgs.elmPackages.elmi-to-json
-            pkgs.elmPackages.elm-optimize-level-2
-        ];
-      };
     });
 }
-
 
