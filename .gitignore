@@ -6,4 +6,6 @@ public
 result
 dist-newstyle
 dist
-
+.direnv
+.tmp*
+.envrc

@@ -1,0 +1,14 @@
+server:
+  - name: Server API # Name of the service
+    source: ./src # root folder for haskell source files
+    includes:
+      - path: Server/**/*.gql # list of gql sources
+        externals:
+          Markdown: Scalars # imports Markdown type declatation from Scalars.hs
+client:
+  - name: Client API # Name of the service
+    source: ./app # root folder for haskell source files
+    schema: ./Schema/schema.gql
+    includes: 
+      - path: ./Schema/mutation.gql # list of gql sources
+        namespace: true
