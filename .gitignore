@@ -9,3 +9,4 @@ dist
 .direnv
 .tmp*
 .envrc
+postgres-data

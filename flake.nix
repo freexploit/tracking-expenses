@@ -68,11 +68,28 @@
             };
       };
 
-      devShell = pkgs.haskellPackages.shellFor {
+      devShell = pkgs.mkShell {
         buildInputs = with pkgs.haskellPackages; [ 
-            cabal-install ormolu  haskell-language-server pkgs.nodejs pkgs.nodePackages.npm
+            cabal-install ormolu  haskell-language-server 
+        ] ++ [ 
+            pkgs.nodejs  
+            pkgs.nodePackages.npm 
+            pkgs.elmPackages.elm-land 
+            pkgs.elmPackages.elm-format 
+            pkgs.elm2nix
+            pkgs.elmPackages.elm
+            pkgs.elmPackages.elm-analyse
+            pkgs.elmPackages.elm-doc-preview
+            pkgs.elmPackages.elm-format
+            pkgs.elmPackages.elm-live
+            pkgs.elmPackages.elm-test
+            pkgs.elmPackages.elm-upgrade
+            pkgs.elmPackages.elm-xref
+            pkgs.elmPackages.elm-language-server
+            pkgs.elmPackages.elm-verify-examples
+            pkgs.elmPackages.elmi-to-json
+            pkgs.elmPackages.elm-optimize-level-2
         ];
-        withHoogle = true;
       };
     });
 }
