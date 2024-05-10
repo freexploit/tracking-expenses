@@ -89,9 +89,9 @@ connectServer = do
             case m of
               Right t  -> do
                   let stuff = proccesHtml <$> t
-                  --print stuff
+                  print stuff
                   let expense = fromJust <| parseExpense <$> stuff
-                  --print expense
+                  print expense
                   return expense
 
               Left err -> do
