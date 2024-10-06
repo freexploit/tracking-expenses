@@ -29,7 +29,7 @@ executable tracking-expenses
 
     -- other-extensions: 
     build-depends:    
-        base >=4.8
+       base ^>=4.18.2.1
         , HaskellNet
         , HaskellNet-SSL
         , bytestring
@@ -45,7 +45,7 @@ executable tracking-expenses
         , text 
         , regex-tdfa
         , uuid-types
-        , aeson == 2.1.2.1
+        , aeson
         , morpheus-graphql
         , morpheus-graphql-core
         , morpheus-graphql-client
