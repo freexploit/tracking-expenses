@@ -46,6 +46,7 @@
                     elm2nix
                     elmPackages.elm-format
                     elmPackages.elm-land
+                    elmPackages.elm-graphql
                     elmPackages.elm
                     elmPackages.elm-format
                     elmPackages.elm-language-server

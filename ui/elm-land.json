@@ -10,13 +10,16 @@
         "html": { "lang": "en" },
         "head": {}
       },
-      "title": "Elm Land",
+      "title": "Tracking expenses",
       "meta": [
         { "charset": "UTF-8" },
         { "http-equiv": "X-UA-Compatible", "content": "IE=edge" },
         { "name": "viewport", "content": "width=device-width, initial-scale=1.0" }
       ],
-      "link": [],
+      "link": [
+          { "rel": "stylesheet", "type": "text/css",  "href": "/css/style.css" },
+          { "rel": "stylesheet", "type": "text/css", "href": "/css/satoshi.css" }
+      ],
       "script": []
     },
     "router": {

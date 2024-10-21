@@ -15,15 +15,26 @@ data-files:
     app/Schema/schema.gql
 
 common warnings
-    ghc-options: -Wall
+    ghc-options:          -Wall
+                          -Wincomplete-uni-patterns
+                          -Wincomplete-record-updates
+                          -Wcompat
+                          -Widentities
+                          -Wredundant-constraints
+                          -fhide-source-paths
+                          -Wpartial-fields
 
 executable tracking-expenses
     import:           warnings
     main-is:          Main.hs
     other-modules:
+        App
+        Config
         Scrapper
-        Env
+        AppEnv
         Graphql
+        MonadTime
+        ImapMonad
         Schema.Schema
         Schema.Mutation
 
@@ -31,6 +42,7 @@ executable tracking-expenses
     build-depends:    
        base ^>=4.18.2.1
         , HaskellNet
+        , mtl
         , HaskellNet-SSL
         , bytestring
         , utf8-string

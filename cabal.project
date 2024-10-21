@@ -2,8 +2,9 @@
 packages: . 
 source-repository-package
   type:     git
-  location: /home/freexploit/code/HaskellNet-SSL
-  commit:      a33edb94dd4a6aa49850ada93f2856cdeca94ebc
+  location: https://github.com/freexploit/HaskellNet-SSL.git
+  tag:      a33edb94dd4a6aa49850ada93f2856cdeca94ebc
+  --sha256: 1vmsbw3h720bjpkf050hbbjm96bk1l3ggip43swbyf2ibcfryg8z
 --  subdir:
 --    lib/amazonka-core
 --    lib/amazonka
@@ -12,4 +13,3 @@ source-repository-package
 --    lib/services/amazonka-cloudformation
 --    lib/services/amazonka-sts
 --    lib/services/amazonka-sso
-  --sha256: 1ibzf8gaxc3l152x5bhppkkr0dz7c41s1zzv5a2rr46hf1fal41j

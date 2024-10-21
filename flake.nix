@@ -23,15 +23,15 @@
           tracking-expenses =
             final.haskell-nix.project' {
               src = ./.;
-              compiler-nix-name = "ghc928";
+              compiler-nix-name = "ghc966";
               # This is used by `nix develop .` to open a shell for use with
-              # `cabal`, `hlint` and `haskell-language-server`
+              # `cabal`, `hlint` and `haskell-language-sgit@github.com:freexploit/HaskellNet-SSL.giterver`
               shell.tools = {
                 cabal = {};
                 haskell-language-server = {};
               };
               # Non-Haskell shell tools go here
-              shell.buildInputs = with pkgs; [nixpkgs-fmt arion nodePackages.graphqurl zlib pkg-config haskellPackages.morpheus-graphql-code-gen
+              shell.buildInputs = with pkgs; [nixpkgs-fmt arion nodePackages.graphqurl zlib pkg-config 
               ];
               # This adds `js-unknown-ghcjs-cabal` to the shell.
               # shell.crossPlatforms = p: [p.ghcjs];

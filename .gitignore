@@ -10,3 +10,6 @@ dist
 .tmp*
 .envrc
 postgres-data
+elm-stuff
+dist
+mail
