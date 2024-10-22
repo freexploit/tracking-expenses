@@ -1,4 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ConstrainedClassMethods #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 
 
 module Graphql(insertExpenses) where
@@ -16,16 +21,21 @@ import Scrapper
 import qualified Scrapper as Sc
 import qualified Data.ByteString.UTF8 as U
 import qualified Data.Text as T
-
-import AppEnv
-import Data.Maybe
 import Data.String (fromString)
 
-authToken :: AppEnv String
-authToken = env "GRAPHQL_AUTH_TOKEN"
+import App (AppM)
+import Config (GraphqlConfig,url, token, grab)
+import Control.Monad.IO.Class (MonadIO)
 
-hasuraURL :: AppEnv String
-hasuraURL = env "GRAPHQL_URL"
+class (Monad m, MonadIO m) => GraphQLMonad m where
+    insertExpenses :: [Expense] -> m (ResponseStream InsertExpenses)
+
+
+--authToken :: AppEnv String
+--authToken = env "GRAPHQL_AUTH_TOKEN"
+
+--hasuraURL :: AppEnv String
+--hasuraURL = env "GRAPHQL_URL"
 
 fromExpense :: Sc.Expense -> Expenses_bac_credomatic_insert_input
 fromExpense exp' =
@@ -39,12 +49,11 @@ fromExpense exp' =
         Nothing
         (U.toString <$> exp' ^. Sc.location )
 
-insertExpenses :: [Expense] -> IO (ResponseStream InsertExpenses)
-insertExpenses expenses = do
-    -- Should be on a reader
-    env_uri <- getterAppEnv hasuraURL
-    -- Should be on a reader
-    env_token <- getterAppEnv authToken
-    let client = (fromString (fromJust env_uri) ::GQLClient) `withHeaders` [("x-hasura-admin-secret", T.pack (fromJust env_token ))]
-    let ss = map fromExpense expenses
-    request  client InsertExpensesArgs { _data = ss }
+instance GraphQLMonad AppM where
+    insertExpenses expenses = do
+        gqlConfig <- grab @GraphqlConfig
+        -- Should be on a reader
+        let client = (fromString gqlConfig.url::GQLClient) `withHeaders` [("x-hasura-admin-secret", T.pack   gqlConfig.token )]
+        let ss  = map fromExpense  expenses
+        request client InsertExpensesArgs { _data = ss }
+

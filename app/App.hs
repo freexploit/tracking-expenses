@@ -20,7 +20,7 @@ type AppConfig = Config AppM
 
 newtype AppM a =  AppM
     { unAppM :: ReaderT AppConfig IO a
-    } deriving (Functor, Applicative, Monad, MonadIO, MonadReader AppConfig)
+    } deriving (Functor, Applicative, Monad, MonadIO, MonadReader AppConfig, MonadFail)
 
 
 runApp :: AppConfig -> AppM a -> IO a

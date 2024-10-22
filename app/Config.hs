@@ -7,11 +7,13 @@
 module Config(Config(..),Has(..), ImapCredentials(..), GraphqlConfig(..), grab) where
 import Data.Kind
 import Control.Monad.Reader
+import Network.Socket
 
 data ImapCredentials = ImapCredentials
     { username :: String
     , password:: String
-    , server:: String
+    , host :: String
+    , port :: PortNumber
     }
 
 data GraphqlConfig = GraphqlConfig

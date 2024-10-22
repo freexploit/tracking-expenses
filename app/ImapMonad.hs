@@ -19,9 +19,10 @@ import Network.HaskellNet.IMAP.Types (UID, MailboxName)
 import Network.HaskellNet.IMAP.SSL
 import App
 import Network.HaskellNet.SSL (defaultSettingsWithPort)
+import Network.Socket
 
 class (Monad m, MonadIO m) => ImapMonad m where 
-    connectServerM :: String ->  m IMAPConnection 
+    connectServerM :: String -> PortNumber ->  m IMAPConnection 
     loginM :: IMAPConnection -> ImapCredentials ->  m () 
     logoutM :: IMAPConnection -> m () 
     fetchM :: IMAPConnection -> UID ->  m ByteString 
@@ -29,10 +30,10 @@ class (Monad m, MonadIO m) => ImapMonad m where
     searchM :: IMAPConnection -> [SearchQuery] -> m [UID] 
 
 instance ImapMonad AppM where
-    connectServerM url' = AppM <| liftIO <| do
+    connectServerM url' port = AppM <| liftIO <| do
         connectIMAPSSLWithSettings url' cfg
      where
-      cfg = (defaultSettingsWithPort 1993) { sslMaxLineLength = 100000
+      cfg = (defaultSettingsWithPort port ) { sslMaxLineLength = 100000
                                            , sslDisableCertificateValidation = True
                                            }
     loginM c creds = AppM <| liftIO <| Network.HaskellNet.IMAP.SSL.login  c creds.username creds.password

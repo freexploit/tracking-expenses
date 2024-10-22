@@ -21,7 +21,7 @@ import Data.MIME (mime, MIMEMessage, contentType, matchContentType, entities)
 import Control.Lens (view, filtered)
 import Control.Lens.Combinators (firstOf)
 import qualified Data.String as B
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, fromMaybe)
 import Graphql
 import Data.Morpheus.Client (single)
 import MonadTime
@@ -29,11 +29,10 @@ import Control.Monad.IO.Class (MonadIO (liftIO))
 import Config
 import App
 import ImapMonad
-
-
-
-
-
+import Network.Socket (PortNumber)
+import Options.Applicative
+import Cli
+import AppEnv
 
 parseMail :: B.ByteString -> Either String MIMEMessage
 parseMail = parse (message mime)
@@ -44,17 +43,17 @@ isHtml = matchContentType "text" (Just "html") . view contentType
 say :: String -> AppM ()
 say = liftIO . print
 
-proccessEmails :: AppM ()
-proccessEmails =  do
+proccessEmails :: String -> Int -> AppM ()
+proccessEmails mail days =  do
         imapCreds <- grab @ImapCredentials
-        c <- connectServerM  <| imapCreds.server
+        c <- connectServerM  imapCreds.host imapCreds.port
         loginM c imapCreds
-        day <- daysAgo 30 
+        day <- daysAgo days
         say imapCreds.username
         ---- TODO: Better errors
         --let _ = list c
         selectM c "INBOX"
-        msgs <- searchM c [FROMs "notificacion@notificacionesbaccr.com", SENTSINCEs day]
+        msgs <- searchM c [FROMs mail, SENTSINCEs day]
         --let firstMsg = head msgs
             --expunge c
         mails <- forM msgs \msg -> do
@@ -83,7 +82,8 @@ proccessEmails =  do
         case expenses' of
             Just exps' -> do
                 --print exps'
-                liftIO <| insertExpenses exps' >>= single >>= print
+                whatevs <- insertExpenses exps' >>= single 
+                liftIO <| print whatevs
                 return ()
             Nothing -> liftIO <| print ("Nothing to procces" :: String)
 
@@ -93,14 +93,30 @@ proccessEmails =  do
 
         logoutM c
 
+configFromEnv :: IO (Maybe AppConfig) 
+configFromEnv = do
+    port' <- getterAppEnv <| env "IMAP_PORT"
+    host' <- getterAppEnv <| env "IMAP_SERVER"
+    username' <- getterAppEnv <| env "EMAIL"
+    pass' <- getterAppEnv <| env "IMAP_PASSWORD"
+    auth_token <- getterAppEnv <| env "GRAPHQL_AUTH_TOKEN"
+    url' <- getterAppEnv <| env "GRAPHQL_URL"
+    let v = fromMaybe (993::PortNumber) (port' >>= \p' -> Just (read p' :: PortNumber))
+    let imap  = ImapCredentials <$> username' <*> pass' <*> host' <*>  Just v
+    let graph = GraphqlConfig <$> url' <*> auth_token
+    return <| Config <$> imap <*> graph
+
+
+
 
 
 main :: IO ()
 main = do
-    let config = Config
-            { imapCredentials = ImapCredentials "christopher@valerio.guru" "pass" "localhost"
-            , graphqlConfig = GraphqlConfig "https://api.graphql.com" "token123"
-            }
-    runApp config proccessEmails
-    putStrLn "run"
-
+    args <- execParser opts
+    config <- configFromEnv
+    runApp (fromJust config) (proccessEmails args.from args.daysSentAgo)
+    where
+      opts = info (argParser <**> helper )
+        ( fullDesc
+        <> progDesc "Expense Tracker"
+        <> header "Tool to parse html emails from banks to track my personal expenses")
