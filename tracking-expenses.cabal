@@ -37,11 +37,32 @@ executable tracking-expenses
         MonadTime
         ImapMonad
         Schema.Schema
-        Schema.Mutation
+        Schema.Mutations.UpdateCommerces
+        Schema.Mutations.DeleteBanks
+        Schema.Mutations.UpdateBanks
+        Schema.Mutations.DeleteCommerces
+        Schema.Mutations.InsertExpenseOne
+        Schema.Mutations.InsertExpenses
+        Schema.Mutations.UpdateExpenseById
+        Schema.Mutations.InsertBankOne
+        Schema.Mutations.InsertBanks
+        Schema.Mutations.UpdateBanksMany
+        Schema.Mutations.UpdateCommerceById
+        Schema.Mutations.UpdateExpenses
+        Schema.Mutations.UpdateBankById
+        Schema.Mutations.DeleteExpenseById
+        Schema.Mutations.UpdateExpensesMany
+        Schema.Mutations.InsertCommerceOne
+        Schema.Mutations.UpdateCommercesMany
+        Schema.Mutations.InsertCommerces
+        Schema.Mutations.DeleteCommerceById
+        Schema.Mutations.DeleteExpenses
+        Schema.Mutations.DeleteBankById
 
     -- other-extensions: 
     build-depends:    
        base ^>=4.18.2.1
+        , geojson
         , HaskellNet
         , network
         , mtl
@@ -60,11 +81,13 @@ executable tracking-expenses
         , text 
         , regex-tdfa
         , uuid-types
+        , uuid
+        , mmzk-typeid
         , aeson
         , morpheus-graphql
         , morpheus-graphql-core
         , morpheus-graphql-client
-        , morpheus-graphql-code-gen
+        --, morpheus-graphql-code-gen
         , morpheus-graphql-subscriptions
 
     hs-source-dirs:   app

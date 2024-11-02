@@ -3,19 +3,20 @@ module MonadTime(MonadTime(..)) where
 import Flow
 import System.Time
 import App
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad.IO.Class (liftIO, MonadIO)
 
 -- Negate a TimeDiff
 negateTimeDiff :: TimeDiff -> TimeDiff
 negateTimeDiff td = TimeDiff { tdYear = -(tdYear td), tdMonth = -(tdMonth td), tdDay = -(tdDay td), tdHour = -(tdHour td), tdMin = -(tdMin td), tdSec = -(tdSec td), tdPicosec = -(tdPicosec td) }
 
-class (Monad m) => MonadTime m where 
+class (Monad m, MonadIO m) => MonadTime m where 
     getCurrentDay :: m CalendarTime
     daysAgo :: Int -> m  CalendarTime
 
 
 
 instance MonadTime AppM where
+
     getCurrentDay = AppM <| liftIO <| do
         clockTime <- getClockTime
         toCalendarTime clockTime

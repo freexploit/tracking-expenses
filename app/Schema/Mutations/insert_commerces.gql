@@ -1,0 +1,9 @@
+# Insert multiple commerces
+mutation InsertCommerces($objects: [commerces_insert_input!]!, $on_conflict: commerces_on_conflict) {
+  insert_commerces(objects: $objects, on_conflict: $on_conflict) {
+    affected_rows
+    returning {
+      id
+    }
+  }
+}

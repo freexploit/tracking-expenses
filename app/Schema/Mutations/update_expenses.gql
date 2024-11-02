@@ -1,0 +1,12 @@
+mutation UpdateExpenses(
+  $where: expenses_bool_exp!
+  $_set: expenses_set_input
+  $_inc: expenses_inc_input
+) {
+  update_expenses(where: $where, _set: $_set, _inc: $_inc) {
+    affected_rows
+    returning {
+      id
+    }
+  }
+}

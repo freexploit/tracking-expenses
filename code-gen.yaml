@@ -8,7 +8,7 @@ server:
 client:
   - name: Client API # Name of the service
     source: ./app # root folder for haskell source files
-    schema: ./Schema/schema.gql
+    schema: ./Schema/schema_generate.gql
     includes: 
-      - path: ./Schema/mutation.gql # list of gql sources
+      - path: ./Schema/Mutations/*.gql # list of gql sources
         namespace: true

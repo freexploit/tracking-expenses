@@ -1,1 +1,0 @@
-CREATE TABLE "public"."expenses_bac_credomatic" ("id" uuid NOT NULL, "currency" text NOT NULL, "commerce" text NOT NULL, "amount" numeric NOT NULL, "location" text NOT NULL, "card_number" text NOT NULL, "card_type" text NOT NULL, "date" date NOT NULL, PRIMARY KEY ("id") , UNIQUE ("id"));

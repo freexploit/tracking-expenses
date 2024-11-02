@@ -6,7 +6,7 @@
 
   services = rec {
     db.service = {
-        image = "postgres:14";
+        image = "postgis/postgis:17-3.5";
         container_name = "hasura_db";
         networks = [ "hasura" ];
         ports = ["5432:5432"];
@@ -20,7 +20,7 @@
     };
 
   graphql-engine.service = {
-    image = "hasura/graphql-engine:v2.35.1";
+    image = "hasura/graphql-engine:v2.44.0";
     ports = ["8080:8080"];
     depends_on = ["db"];
     networks = [ "hasura" ];
@@ -34,18 +34,18 @@
         };
     };
 
-  #docker run -e ROUNDCUBEMAIL_DEFAULT_HOST=mail -e ROUNDCUBEMAIL_SMTP_SERVER=mail -p 8000:80 -d roundcube/roundcubemail
+        #docker run -e ROUNDCUBEMAIL_DEFAULT_HOST=mail -e ROUNDCUBEMAIL_SMTP_SERVER=mail -p 8000:80 -d roundcube/roundcubemail
 
-  roundcubemail.service = {
-    image = "roundcube/roundcubemail:latest";
-    networks = [ "hasura" ];
-    ports = ["8000:80"];
-        environment = {
-            "ROUNDCUBEMAIL_DEFAULT_HOST"="tls://dovecot:993";
-            "ROUNDCUBEMAIL_SMTP_SERVER"="dovecot";
-            #"ROUNDCUBEMAIL_USERNAME_DOMAIN"="valerio.guru";
-        };
-  };
+        #roundcubemail.service = {
+        #  image = "roundcube/roundcubemail:latest";
+        #  networks = [ "hasura" ];
+        #  ports = ["8000:80"];
+        #      environment = {
+        #          "ROUNDCUBEMAIL_DEFAULT_HOST"="tls://dovecot:993";
+        #          "ROUNDCUBEMAIL_SMTP_SERVER"="dovecot";
+        #          "ROUNDCUBEMAIL_USERNAME_DOMAIN"="valerio.guru";
+        #      };
+        #};
 
   dovecot.service = {
     image = "dovecot/dovecot:2.3-latest";

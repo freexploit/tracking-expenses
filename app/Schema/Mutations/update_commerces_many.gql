@@ -1,0 +1,5 @@
+mutation UpdateCommercesMany($updates: [commerces_updates!]!) {
+  update_commerces_many(updates: $updates) {
+    affected_rows
+  }
+}

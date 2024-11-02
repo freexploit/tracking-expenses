@@ -1,0 +1,6 @@
+# Delete multiple commerces based on a condition
+mutation DeleteCommerces($where: commerces_bool_exp!) {
+  delete_commerces(where: $where) {
+    affected_rows
+  }
+}

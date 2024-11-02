@@ -1,0 +1,1406 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""
+columns and relationships of "banks"
+"""
+type banks {
+  id: uuid!
+  location: geography
+  name: String!
+  notification_email: String
+}
+
+"""
+aggregated selection of "banks"
+"""
+type banks_aggregate {
+  aggregate: banks_aggregate_fields
+  nodes: [banks!]!
+}
+
+"""
+aggregate fields of "banks"
+"""
+type banks_aggregate_fields {
+  count(columns: [banks_select_column!], distinct: Boolean): Int!
+  max: banks_max_fields
+  min: banks_min_fields
+}
+
+"""
+Boolean expression to filter rows from the table "banks". All fields are combined with a logical 'AND'.
+"""
+input banks_bool_exp {
+  _and: [banks_bool_exp!]
+  _not: banks_bool_exp
+  _or: [banks_bool_exp!]
+  id: uuid_comparison_exp
+  location: geography_comparison_exp
+  name: String_comparison_exp
+  notification_email: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "banks"
+"""
+enum banks_constraint {
+  """
+  unique or primary key constraint on columns "notification_email"
+  """
+  banks_notification_email_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  banks_pkey
+}
+
+"""
+input type for inserting data into table "banks"
+"""
+input banks_insert_input {
+  id: uuid
+  location: geography
+  name: String
+  notification_email: String
+}
+
+"""aggregate max on columns"""
+type banks_max_fields {
+  id: uuid
+  name: String
+  notification_email: String
+}
+
+"""aggregate min on columns"""
+type banks_min_fields {
+  id: uuid
+  name: String
+  notification_email: String
+}
+
+"""
+response of any mutation on the table "banks"
+"""
+type banks_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [banks!]!
+}
+
+"""
+on_conflict condition type for table "banks"
+"""
+input banks_on_conflict {
+  constraint: banks_constraint!
+  update_columns: [banks_update_column!]! = []
+  where: banks_bool_exp
+}
+
+"""Ordering options when selecting data from "banks"."""
+input banks_order_by {
+  id: order_by
+  location: order_by
+  name: order_by
+  notification_email: order_by
+}
+
+"""primary key columns input for table: banks"""
+input banks_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "banks"
+"""
+enum banks_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  location
+
+  """column name"""
+  name
+
+  """column name"""
+  notification_email
+}
+
+"""
+input type for updating data in table "banks"
+"""
+input banks_set_input {
+  id: uuid
+  location: geography
+  name: String
+  notification_email: String
+}
+
+"""
+Streaming cursor of the table "banks"
+"""
+input banks_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: banks_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input banks_stream_cursor_value_input {
+  id: uuid
+  location: geography
+  name: String
+  notification_email: String
+}
+
+"""
+update columns of table "banks"
+"""
+enum banks_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  location
+
+  """column name"""
+  name
+
+  """column name"""
+  notification_email
+}
+
+input banks_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: banks_set_input
+
+  """filter the rows which have to be updated"""
+  where: banks_bool_exp!
+}
+
+scalar card_type
+
+"""
+Boolean expression to compare columns of type "card_type". All fields are combined with logical 'AND'.
+"""
+input card_type_comparison_exp {
+  _eq: card_type
+  _gt: card_type
+  _gte: card_type
+  _in: [card_type!]
+  _is_null: Boolean
+  _lt: card_type
+  _lte: card_type
+  _neq: card_type
+  _nin: [card_type!]
+}
+
+"""
+columns and relationships of "commerces"
+"""
+type commerces {
+  id: uuid!
+  location: geography
+  name: String
+}
+
+"""
+aggregated selection of "commerces"
+"""
+type commerces_aggregate {
+  aggregate: commerces_aggregate_fields
+  nodes: [commerces!]!
+}
+
+"""
+aggregate fields of "commerces"
+"""
+type commerces_aggregate_fields {
+  count(columns: [commerces_select_column!], distinct: Boolean): Int!
+  max: commerces_max_fields
+  min: commerces_min_fields
+}
+
+"""
+Boolean expression to filter rows from the table "commerces". All fields are combined with a logical 'AND'.
+"""
+input commerces_bool_exp {
+  _and: [commerces_bool_exp!]
+  _not: commerces_bool_exp
+  _or: [commerces_bool_exp!]
+  id: uuid_comparison_exp
+  location: geography_comparison_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "commerces"
+"""
+enum commerces_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  commerces_pkey
+}
+
+"""
+input type for inserting data into table "commerces"
+"""
+input commerces_insert_input {
+  id: uuid
+  location: geography
+  name: String
+}
+
+"""aggregate max on columns"""
+type commerces_max_fields {
+  id: uuid
+  name: String
+}
+
+"""aggregate min on columns"""
+type commerces_min_fields {
+  id: uuid
+  name: String
+}
+
+"""
+response of any mutation on the table "commerces"
+"""
+type commerces_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [commerces!]!
+}
+
+"""
+on_conflict condition type for table "commerces"
+"""
+input commerces_on_conflict {
+  constraint: commerces_constraint!
+  update_columns: [commerces_update_column!]! = []
+  where: commerces_bool_exp
+}
+
+"""Ordering options when selecting data from "commerces"."""
+input commerces_order_by {
+  id: order_by
+  location: order_by
+  name: order_by
+}
+
+"""primary key columns input for table: commerces"""
+input commerces_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "commerces"
+"""
+enum commerces_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  location
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "commerces"
+"""
+input commerces_set_input {
+  id: uuid
+  location: geography
+  name: String
+}
+
+"""
+Streaming cursor of the table "commerces"
+"""
+input commerces_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: commerces_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input commerces_stream_cursor_value_input {
+  id: uuid
+  location: geography
+  name: String
+}
+
+"""
+update columns of table "commerces"
+"""
+enum commerces_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  location
+
+  """column name"""
+  name
+}
+
+input commerces_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: commerces_set_input
+
+  """filter the rows which have to be updated"""
+  where: commerces_bool_exp!
+}
+
+"""ordering argument of a cursor"""
+enum cursor_ordering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+scalar date
+
+"""
+Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'.
+"""
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+"""
+columns and relationships of "expenses"
+"""
+type expenses {
+  amount: money!
+  bank_id: uuid
+  card_number: String!
+  card_type: card_type!
+  commerce_id: uuid
+  currency: String!
+  id: uuid!
+  purchase_date: date
+}
+
+"""
+aggregated selection of "expenses"
+"""
+type expenses_aggregate {
+  aggregate: expenses_aggregate_fields
+  nodes: [expenses!]!
+}
+
+"""
+aggregate fields of "expenses"
+"""
+type expenses_aggregate_fields {
+  avg: expenses_avg_fields
+  count(columns: [expenses_select_column!], distinct: Boolean): Int!
+  max: expenses_max_fields
+  min: expenses_min_fields
+  stddev: expenses_stddev_fields
+  stddev_pop: expenses_stddev_pop_fields
+  stddev_samp: expenses_stddev_samp_fields
+  sum: expenses_sum_fields
+  var_pop: expenses_var_pop_fields
+  var_samp: expenses_var_samp_fields
+  variance: expenses_variance_fields
+}
+
+"""aggregate avg on columns"""
+type expenses_avg_fields {
+  amount: Float
+}
+
+"""
+Boolean expression to filter rows from the table "expenses". All fields are combined with a logical 'AND'.
+"""
+input expenses_bool_exp {
+  _and: [expenses_bool_exp!]
+  _not: expenses_bool_exp
+  _or: [expenses_bool_exp!]
+  amount: money_comparison_exp
+  bank_id: uuid_comparison_exp
+  card_number: String_comparison_exp
+  card_type: card_type_comparison_exp
+  commerce_id: uuid_comparison_exp
+  currency: String_comparison_exp
+  id: uuid_comparison_exp
+  purchase_date: date_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "expenses"
+"""
+enum expenses_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  expenses_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "expenses"
+"""
+input expenses_inc_input {
+  amount: money
+}
+
+"""
+input type for inserting data into table "expenses"
+"""
+input expenses_insert_input {
+  amount: money
+  bank_id: uuid
+  card_number: String
+  card_type: card_type
+  commerce_id: uuid
+  currency: String
+  id: uuid
+  purchase_date: date
+}
+
+"""aggregate max on columns"""
+type expenses_max_fields {
+  amount: money
+  bank_id: uuid
+  card_number: String
+  card_type: card_type
+  commerce_id: uuid
+  currency: String
+  id: uuid
+  purchase_date: date
+}
+
+"""aggregate min on columns"""
+type expenses_min_fields {
+  amount: money
+  bank_id: uuid
+  card_number: String
+  card_type: card_type
+  commerce_id: uuid
+  currency: String
+  id: uuid
+  purchase_date: date
+}
+
+"""
+response of any mutation on the table "expenses"
+"""
+type expenses_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [expenses!]!
+}
+
+"""
+on_conflict condition type for table "expenses"
+"""
+input expenses_on_conflict {
+  constraint: expenses_constraint!
+  update_columns: [expenses_update_column!]! = []
+  where: expenses_bool_exp
+}
+
+"""Ordering options when selecting data from "expenses"."""
+input expenses_order_by {
+  amount: order_by
+  bank_id: order_by
+  card_number: order_by
+  card_type: order_by
+  commerce_id: order_by
+  currency: order_by
+  id: order_by
+  purchase_date: order_by
+}
+
+"""primary key columns input for table: expenses"""
+input expenses_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "expenses"
+"""
+enum expenses_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  bank_id
+
+  """column name"""
+  card_number
+
+  """column name"""
+  card_type
+
+  """column name"""
+  commerce_id
+
+  """column name"""
+  currency
+
+  """column name"""
+  id
+
+  """column name"""
+  purchase_date
+}
+
+"""
+input type for updating data in table "expenses"
+"""
+input expenses_set_input {
+  amount: money
+  bank_id: uuid
+  card_number: String
+  card_type: card_type
+  commerce_id: uuid
+  currency: String
+  id: uuid
+  purchase_date: date
+}
+
+"""aggregate stddev on columns"""
+type expenses_stddev_fields {
+  amount: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type expenses_stddev_pop_fields {
+  amount: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type expenses_stddev_samp_fields {
+  amount: Float
+}
+
+"""
+Streaming cursor of the table "expenses"
+"""
+input expenses_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: expenses_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input expenses_stream_cursor_value_input {
+  amount: money
+  bank_id: uuid
+  card_number: String
+  card_type: card_type
+  commerce_id: uuid
+  currency: String
+  id: uuid
+  purchase_date: date
+}
+
+"""aggregate sum on columns"""
+type expenses_sum_fields {
+  amount: money
+}
+
+"""
+update columns of table "expenses"
+"""
+enum expenses_update_column {
+  """column name"""
+  amount
+
+  """column name"""
+  bank_id
+
+  """column name"""
+  card_number
+
+  """column name"""
+  card_type
+
+  """column name"""
+  commerce_id
+
+  """column name"""
+  currency
+
+  """column name"""
+  id
+
+  """column name"""
+  purchase_date
+}
+
+input expenses_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: expenses_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: expenses_set_input
+
+  """filter the rows which have to be updated"""
+  where: expenses_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type expenses_var_pop_fields {
+  amount: Float
+}
+
+"""aggregate var_samp on columns"""
+type expenses_var_samp_fields {
+  amount: Float
+}
+
+"""aggregate variance on columns"""
+type expenses_variance_fields {
+  amount: Float
+}
+
+scalar geography
+
+input geography_cast_exp {
+  geometry: geometry_comparison_exp
+}
+
+"""
+Boolean expression to compare columns of type "geography". All fields are combined with logical 'AND'.
+"""
+input geography_comparison_exp {
+  _cast: geography_cast_exp
+  _eq: geography
+  _gt: geography
+  _gte: geography
+  _in: [geography!]
+  _is_null: Boolean
+  _lt: geography
+  _lte: geography
+  _neq: geography
+  _nin: [geography!]
+
+  """is the column within a given distance from the given geography value"""
+  _st_d_within: st_d_within_geography_input
+
+  """does the column spatially intersect the given geography value"""
+  _st_intersects: geography
+}
+
+scalar geometry
+
+input geometry_cast_exp {
+  geography: geography_comparison_exp
+}
+
+"""
+Boolean expression to compare columns of type "geometry". All fields are combined with logical 'AND'.
+"""
+input geometry_comparison_exp {
+  _cast: geometry_cast_exp
+  _eq: geometry
+  _gt: geometry
+  _gte: geometry
+  _in: [geometry!]
+  _is_null: Boolean
+  _lt: geometry
+  _lte: geometry
+  _neq: geometry
+  _nin: [geometry!]
+
+  """is the column within a given 3D distance from the given geometry value"""
+  _st_3d_d_within: st_d_within_input
+
+  """does the column spatially intersect the given geometry value in 3D"""
+  _st_3d_intersects: geometry
+
+  """does the column contain the given geometry value"""
+  _st_contains: geometry
+
+  """does the column cross the given geometry value"""
+  _st_crosses: geometry
+
+  """is the column within a given distance from the given geometry value"""
+  _st_d_within: st_d_within_input
+
+  """
+  is the column equal to given geometry value (directionality is ignored)
+  """
+  _st_equals: geometry
+
+  """does the column spatially intersect the given geometry value"""
+  _st_intersects: geometry
+
+  """
+  does the column 'spatially overlap' (intersect but not completely contain) the given geometry value
+  """
+  _st_overlaps: geometry
+
+  """
+  does the column have atleast one point in common with the given geometry value
+  """
+  _st_touches: geometry
+
+  """is the column contained in the given geometry value"""
+  _st_within: geometry
+}
+
+scalar money
+
+"""
+Boolean expression to compare columns of type "money". All fields are combined with logical 'AND'.
+"""
+input money_comparison_exp {
+  _eq: money
+  _gt: money
+  _gte: money
+  _in: [money!]
+  _is_null: Boolean
+  _lt: money
+  _lte: money
+  _neq: money
+  _nin: [money!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "banks"
+  """
+  delete_banks(
+    """filter the rows which have to be deleted"""
+    where: banks_bool_exp!
+  ): banks_mutation_response
+
+  """
+  delete single row from the table: "banks"
+  """
+  delete_banks_by_pk(id: uuid!): banks
+
+  """
+  delete data from the table: "commerces"
+  """
+  delete_commerces(
+    """filter the rows which have to be deleted"""
+    where: commerces_bool_exp!
+  ): commerces_mutation_response
+
+  """
+  delete single row from the table: "commerces"
+  """
+  delete_commerces_by_pk(id: uuid!): commerces
+
+  """
+  delete data from the table: "expenses"
+  """
+  delete_expenses(
+    """filter the rows which have to be deleted"""
+    where: expenses_bool_exp!
+  ): expenses_mutation_response
+
+  """
+  delete single row from the table: "expenses"
+  """
+  delete_expenses_by_pk(id: uuid!): expenses
+
+  """
+  insert data into the table: "banks"
+  """
+  insert_banks(
+    """the rows to be inserted"""
+    objects: [banks_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: banks_on_conflict
+  ): banks_mutation_response
+
+  """
+  insert a single row into the table: "banks"
+  """
+  insert_banks_one(
+    """the row to be inserted"""
+    object: banks_insert_input!
+
+    """upsert condition"""
+    on_conflict: banks_on_conflict
+  ): banks
+
+  """
+  insert data into the table: "commerces"
+  """
+  insert_commerces(
+    """the rows to be inserted"""
+    objects: [commerces_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: commerces_on_conflict
+  ): commerces_mutation_response
+
+  """
+  insert a single row into the table: "commerces"
+  """
+  insert_commerces_one(
+    """the row to be inserted"""
+    object: commerces_insert_input!
+
+    """upsert condition"""
+    on_conflict: commerces_on_conflict
+  ): commerces
+
+  """
+  insert data into the table: "expenses"
+  """
+  insert_expenses(
+    """the rows to be inserted"""
+    objects: [expenses_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: expenses_on_conflict
+  ): expenses_mutation_response
+
+  """
+  insert a single row into the table: "expenses"
+  """
+  insert_expenses_one(
+    """the row to be inserted"""
+    object: expenses_insert_input!
+
+    """upsert condition"""
+    on_conflict: expenses_on_conflict
+  ): expenses
+
+  """
+  update data of the table: "banks"
+  """
+  update_banks(
+    """sets the columns of the filtered rows to the given values"""
+    _set: banks_set_input
+
+    """filter the rows which have to be updated"""
+    where: banks_bool_exp!
+  ): banks_mutation_response
+
+  """
+  update single row of the table: "banks"
+  """
+  update_banks_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: banks_set_input
+    pk_columns: banks_pk_columns_input!
+  ): banks
+
+  """
+  update multiples rows of table: "banks"
+  """
+  update_banks_many(
+    """updates to execute, in order"""
+    updates: [banks_updates!]!
+  ): [banks_mutation_response]
+
+  """
+  update data of the table: "commerces"
+  """
+  update_commerces(
+    """sets the columns of the filtered rows to the given values"""
+    _set: commerces_set_input
+
+    """filter the rows which have to be updated"""
+    where: commerces_bool_exp!
+  ): commerces_mutation_response
+
+  """
+  update single row of the table: "commerces"
+  """
+  update_commerces_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: commerces_set_input
+    pk_columns: commerces_pk_columns_input!
+  ): commerces
+
+  """
+  update multiples rows of table: "commerces"
+  """
+  update_commerces_many(
+    """updates to execute, in order"""
+    updates: [commerces_updates!]!
+  ): [commerces_mutation_response]
+
+  """
+  update data of the table: "expenses"
+  """
+  update_expenses(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: expenses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: expenses_set_input
+
+    """filter the rows which have to be updated"""
+    where: expenses_bool_exp!
+  ): expenses_mutation_response
+
+  """
+  update single row of the table: "expenses"
+  """
+  update_expenses_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: expenses_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: expenses_set_input
+    pk_columns: expenses_pk_columns_input!
+  ): expenses
+
+  """
+  update multiples rows of table: "expenses"
+  """
+  update_expenses_many(
+    """updates to execute, in order"""
+    updates: [expenses_updates!]!
+  ): [expenses_mutation_response]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+type query_root {
+  """
+  fetch data from the table: "banks"
+  """
+  banks(
+    """distinct select on columns"""
+    distinct_on: [banks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [banks_order_by!]
+
+    """filter the rows returned"""
+    where: banks_bool_exp
+  ): [banks!]!
+
+  """
+  fetch aggregated fields from the table: "banks"
+  """
+  banks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [banks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [banks_order_by!]
+
+    """filter the rows returned"""
+    where: banks_bool_exp
+  ): banks_aggregate!
+
+  """fetch data from the table: "banks" using primary key columns"""
+  banks_by_pk(id: uuid!): banks
+
+  """
+  fetch data from the table: "commerces"
+  """
+  commerces(
+    """distinct select on columns"""
+    distinct_on: [commerces_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [commerces_order_by!]
+
+    """filter the rows returned"""
+    where: commerces_bool_exp
+  ): [commerces!]!
+
+  """
+  fetch aggregated fields from the table: "commerces"
+  """
+  commerces_aggregate(
+    """distinct select on columns"""
+    distinct_on: [commerces_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [commerces_order_by!]
+
+    """filter the rows returned"""
+    where: commerces_bool_exp
+  ): commerces_aggregate!
+
+  """fetch data from the table: "commerces" using primary key columns"""
+  commerces_by_pk(id: uuid!): commerces
+
+  """
+  fetch data from the table: "expenses"
+  """
+  expenses(
+    """distinct select on columns"""
+    distinct_on: [expenses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [expenses_order_by!]
+
+    """filter the rows returned"""
+    where: expenses_bool_exp
+  ): [expenses!]!
+
+  """
+  fetch aggregated fields from the table: "expenses"
+  """
+  expenses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [expenses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [expenses_order_by!]
+
+    """filter the rows returned"""
+    where: expenses_bool_exp
+  ): expenses_aggregate!
+
+  """fetch data from the table: "expenses" using primary key columns"""
+  expenses_by_pk(id: uuid!): expenses
+}
+
+input st_d_within_geography_input {
+  distance: Float!
+  from: geography!
+  use_spheroid: Boolean = true
+}
+
+input st_d_within_input {
+  distance: Float!
+  from: geometry!
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "banks"
+  """
+  banks(
+    """distinct select on columns"""
+    distinct_on: [banks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [banks_order_by!]
+
+    """filter the rows returned"""
+    where: banks_bool_exp
+  ): [banks!]!
+
+  """
+  fetch aggregated fields from the table: "banks"
+  """
+  banks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [banks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [banks_order_by!]
+
+    """filter the rows returned"""
+    where: banks_bool_exp
+  ): banks_aggregate!
+
+  """fetch data from the table: "banks" using primary key columns"""
+  banks_by_pk(id: uuid!): banks
+
+  """
+  fetch data from the table in a streaming manner: "banks"
+  """
+  banks_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [banks_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: banks_bool_exp
+  ): [banks!]!
+
+  """
+  fetch data from the table: "commerces"
+  """
+  commerces(
+    """distinct select on columns"""
+    distinct_on: [commerces_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [commerces_order_by!]
+
+    """filter the rows returned"""
+    where: commerces_bool_exp
+  ): [commerces!]!
+
+  """
+  fetch aggregated fields from the table: "commerces"
+  """
+  commerces_aggregate(
+    """distinct select on columns"""
+    distinct_on: [commerces_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [commerces_order_by!]
+
+    """filter the rows returned"""
+    where: commerces_bool_exp
+  ): commerces_aggregate!
+
+  """fetch data from the table: "commerces" using primary key columns"""
+  commerces_by_pk(id: uuid!): commerces
+
+  """
+  fetch data from the table in a streaming manner: "commerces"
+  """
+  commerces_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [commerces_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: commerces_bool_exp
+  ): [commerces!]!
+
+  """
+  fetch data from the table: "expenses"
+  """
+  expenses(
+    """distinct select on columns"""
+    distinct_on: [expenses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [expenses_order_by!]
+
+    """filter the rows returned"""
+    where: expenses_bool_exp
+  ): [expenses!]!
+
+  """
+  fetch aggregated fields from the table: "expenses"
+  """
+  expenses_aggregate(
+    """distinct select on columns"""
+    distinct_on: [expenses_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [expenses_order_by!]
+
+    """filter the rows returned"""
+    where: expenses_bool_exp
+  ): expenses_aggregate!
+
+  """fetch data from the table: "expenses" using primary key columns"""
+  expenses_by_pk(id: uuid!): expenses
+
+  """
+  fetch data from the table in a streaming manner: "expenses"
+  """
+  expenses_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [expenses_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: expenses_bool_exp
+  ): [expenses!]!
+}
+
+scalar uuid
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input uuid_comparison_exp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _is_null: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}
+

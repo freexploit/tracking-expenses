@@ -1,0 +1,12 @@
+# Delete multiple banks based on a condition
+mutation DeleteBanks($where: banks_bool_exp!) {
+  delete_banks(where: $where) {
+    affected_rows
+        returning {
+          id
+          location
+          name
+          notification_email
+        }
+  }
+}

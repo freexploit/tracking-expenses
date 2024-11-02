@@ -1,0 +1,6 @@
+# Update multiple expenses with different updates
+mutation UpdateExpensesMany($updates: [expenses_updates!]!) {
+  update_expenses_many(updates: $updates) {
+    affected_rows
+  }
+}

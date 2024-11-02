@@ -1,0 +1,6 @@
+# Insert a single commerce
+mutation InsertCommerceOne($object: commerces_insert_input!, $on_conflict: commerces_on_conflict) {
+  insert_commerces_one(object: $object, on_conflict: $on_conflict) {
+    id
+  }
+}

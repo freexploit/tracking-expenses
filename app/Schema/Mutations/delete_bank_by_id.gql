@@ -1,0 +1,5 @@
+mutation DeleteBankById($id: uuid!) {
+  delete_banks_by_pk(id: $id) {
+    id
+  }
+}

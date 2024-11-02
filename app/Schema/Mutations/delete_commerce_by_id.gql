@@ -1,0 +1,6 @@
+# Delete a commerce by primary key
+mutation DeleteCommerceById($id: uuid!) {
+  delete_commerces_by_pk(id: $id) {
+    id
+  }
+}

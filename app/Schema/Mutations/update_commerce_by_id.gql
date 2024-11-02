@@ -1,0 +1,8 @@
+mutation UpdateCommerceById(
+  $pk_columns: commerces_pk_columns_input!
+  $_set: commerces_set_input
+) {
+  update_commerces_by_pk(pk_columns: $pk_columns, _set: $_set) {
+    id
+  }
+}

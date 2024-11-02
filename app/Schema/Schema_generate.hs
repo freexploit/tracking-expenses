@@ -4,7 +4,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Schema where
+module Schema.Schema_generate where
 
 import Data.Morpheus.Client.CodeGen.Internal
 

@@ -31,7 +31,7 @@
                 haskell-language-server = {};
               };
               # Non-Haskell shell tools go here
-              shell.buildInputs = with pkgs; [nixpkgs-fmt arion nodePackages.graphqurl zlib pkg-config 
+              shell.buildInputs = with pkgs; [nixpkgs-fmt arion nodePackages.graphqurl zlib pkg-config graphqurl ormolu
               ];
               # This adds `js-unknown-ghcjs-cabal` to the shell.
               # shell.crossPlatforms = p: [p.ghcjs];

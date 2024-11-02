@@ -1,0 +1,9 @@
+# Insert multiple expenses
+mutation InsertExpenses($objects: [expenses_insert_input!]!, $on_conflict: expenses_on_conflict) {
+  insert_expenses(objects: $objects, on_conflict: $on_conflict) {
+    affected_rows
+    returning {
+      id
+    }
+  }
+}

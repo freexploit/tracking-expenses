@@ -1,0 +1,6 @@
+# Insert a single bank
+mutation InsertBankOne($object: banks_insert_input!, $on_conflict: banks_on_conflict) {
+  insert_banks_one(object: $object, on_conflict: $on_conflict) {
+    id
+  }
+}

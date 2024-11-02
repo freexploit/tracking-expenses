@@ -16,32 +16,35 @@ import           Control.Lens(makeLenses)
 import           Data.Generics.Labels    ()
 import qualified Data.ByteString.Char8 as B
 import Text.StringLike (toString)
-import Data.List
+import Data.List ( find, isInfixOf )
 import Data.Time
 import Text.Read (readMaybe)
 import Text.Regex.TDFA
 import GHC.Generics
 import Data.Maybe (fromMaybe)
-import Data.Char (isDigit)
+import Data.UUID.V7 (UUID)
+import Types
 
 
-data CardType = VISA
-    | MASTERCARD
-    | AMEX
-    | ATM
-    deriving(Show, Generic)
 
-fromStringCardType :: String -> Maybe CardType
-fromStringCardType s = case s of
-  "VISA" -> Just VISA
-  "MASTER" -> Just MASTERCARD
-  "AMEX" -> Just AMEX
-  "ATM" -> Just ATM
-  _ -> Nothing
+data Bank = Bank 
+    { _bank_id:: Maybe UUID
+    , _bank_name :: Maybe String
+    , _bank_location :: Maybe Geography
+    , _bank_email :: Maybe String
+    }
+    deriving (Show,Generic)
+
+data Commerce = Commerce 
+    { _commerce_id:: Maybe UUID
+    , _commerce_name :: Maybe String
+    , _commerce_location :: Maybe Geography
+    }
+    deriving (Show,Generic)
 
 data Expense = Expense
-    {   _commerce :: Maybe  B.ByteString,
-        _location :: Maybe B.ByteString,
+    {   _commerce :: Maybe  Commerce,
+        _bank :: Maybe Bank, 
         _currency ::Maybe  B.ByteString,
         _amount :: Maybe  Double,
         _card :: Maybe CardType,
@@ -50,7 +53,9 @@ data Expense = Expense
     }
   deriving (Show,Generic)
 
-makeLenses ''Expense
+makeLenses ''Expense 
+makeLenses ''Bank 
+makeLenses ''Commerce
 
 containsSubstring :: String -> [String] -> Bool
 containsSubstring sub = any (sub `isInfixOf`)
@@ -64,17 +69,18 @@ createCompose = map containsSubstring
 
 filterer :: [[String] -> Bool]
 filterer = createCompose ["Comercio"::String, "Ciudad"::String, "Monto"::String, "Fecha":: String, "AMEX"::String, "VISA"::String, "MASTER"::String, "ATM"::String]
+
 remover :: [[[Char]]] -> [[[Char]]]
-remover = map (map (filter (`notElem` ("\r\n"::[Char])) ))
+remover = map (map (Prelude.filter (`notElem` ("\r\n"::[Char])) ))
 
 proccesHtml :: B.ByteString -> [[String]]
 proccesHtml s =
-        toString s |> parseTags
+        Text.StringLike.toString s |> parseTags
         |> map ( parseRow <. takeWhile (~/= ("</tr>"::[Char]))) <. sections (~== ("<tr>"::[Char]))
         |> remover
-        |> flip filter
+        |> flip Prelude.filter
         |> flip map filterer
-        |> filter (not . null)
+        |> Prelude.filter (not . Prelude.null)
         |> map head
 
 
@@ -84,21 +90,25 @@ parseDate input = do
     let sixHours = 6 * 60 * 60
     return $ addUTCTime sixHours utcDate
 
+parseCommerce :: String -> String -> Maybe Commerce
+parseCommerce name' _ =  Just (Commerce  Nothing  (Just name')  Nothing)
+    
+
 parseExpense :: [[String]] -> Maybe Expense
 parseExpense xs = do
-  let commerce' = head <. tail <$> find ((== "Comercio:") <. head ) xs
-  let location' = concat <. tail <$> find ((=~ ("Ciudad.*"::String) ) <. head ) xs
+  commerce' <- head <. tail <$> find ((== "Comercio:") <. head ) xs
+  location' <- concat <. tail <$> find ((=~ ("Ciudad.*"::String) ) <. head ) xs
   fecha <- head <. tail <$> find ((== "Fecha:") <. head ) xs
   monto <- head <. tail <$> find ((== "Monto:") <. head ) xs
   let cardType = findCardType
   let currency' = B.pack <| takeWhile (/= ' ') monto
-  let amountStr= filter (/= ' ') <|  dropWhile (/= ' ') monto
-  let amount' = Just <| fromMaybe 0.0 <| readMaybe <| filter (/= ',') amountStr :: Maybe Double
+  let amountStr= Prelude.filter (/= ' ') <|  dropWhile (/= ' ') monto
+  let amount' = Just <| fromMaybe 0.0 <| readMaybe <| Prelude.filter (/= ',') amountStr :: Maybe Double
   card' <- fromStringCardType <$> cardType
   let card_number' =  head <. tail <$> find (\x ->  head (tail x) =~ ("\\*+[[:digit:]]+"::String):: Bool)  xs
-  return <| Expense (B.pack <$> commerce') (B.pack <$> location') (Just currency') amount' card' (B.pack <$> card_number') (parseDate  fecha)
+  return <| Expense (parseCommerce commerce' location') Nothing (Just currency') amount' card' (B.pack <$> card_number') (parseDate  fecha)
   where
-    findCardType  = head <$> find (\x -> head x == "MASTER" || head x == "VISA" || head x == "AMEX" || head x == "ATM") xs
+    findCardType  = head <$> find (\x -> head x == "MASTER" || head x == "VISA" || head x == "AMEX" || head x == "ATM" || head x == "TX") xs
 
 
 --[[["Comercio:","GITHUB"]],[["Ciudad y pa\237s:","+18774484820, Pais no Definido"]],[["Monto:","USD 3.67"]],[["MASTER","************3785"]]

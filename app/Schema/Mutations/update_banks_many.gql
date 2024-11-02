@@ -1,0 +1,5 @@
+mutation UpdateBanksMany($updates: [banks_updates!]!) {
+  update_banks_many(updates: $updates) {
+    affected_rows
+  }
+}

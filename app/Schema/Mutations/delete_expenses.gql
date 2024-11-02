@@ -1,0 +1,6 @@
+# Delete multiple expenses based on a condition
+mutation DeleteExpenses($where: expenses_bool_exp!) {
+  delete_expenses(where: $where) {
+    affected_rows
+  }
+}

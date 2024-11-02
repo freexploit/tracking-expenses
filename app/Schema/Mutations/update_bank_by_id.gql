@@ -1,0 +1,8 @@
+mutation UpdateBankById(
+  $pk_columns: banks_pk_columns_input!
+  $_set: banks_set_input
+) {
+  update_banks_by_pk(pk_columns: $pk_columns, _set: $_set) {
+    id
+  }
+}

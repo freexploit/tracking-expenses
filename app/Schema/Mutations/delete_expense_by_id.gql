@@ -1,0 +1,6 @@
+# Delete an expense by primary key
+mutation DeleteExpenseById($id: uuid!) {
+  delete_expenses_by_pk(id: $id) {
+    id
+  }
+}

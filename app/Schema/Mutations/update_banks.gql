@@ -1,0 +1,8 @@
+mutation UpdateBanks($where: banks_bool_exp!, $_set: banks_set_input) {
+  update_banks(where: $where, _set: $_set) {
+    affected_rows
+    returning {
+      id
+    }
+  }
+}
