@@ -6,7 +6,7 @@
 module Schema.Mutations.DeleteCommerces where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
 
 instance RequestType DeleteCommerces where
   type RequestArgs DeleteCommerces = DeleteCommercesArgs
@@ -33,8 +33,10 @@ instance FromJSON DeleteCommercesDelete_commerces where
     withObject "DeleteCommercesDelete_commerces" (\v -> DeleteCommercesDelete_commerces <$> v .: "affected_rows")
 
 newtype DeleteCommercesArgs = DeleteCommercesArgs
-  { where :: commerces_bool_exp
+  { _where :: Commerces_bool_exp
   }
+
+
   deriving (Generic, Show, Eq)
 
 instance ToJSON DeleteCommercesArgs where

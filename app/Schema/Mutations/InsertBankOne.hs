@@ -3,10 +3,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.InsertBank_one where
+module Schema.Mutations.InsertBankOne where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType InsertBankOne where
   type RequestArgs InsertBankOne = InsertBankOneArgs
@@ -24,7 +25,7 @@ instance FromJSON InsertBankOne where
     withObject "InsertBankOne" (\v -> InsertBankOne <$> v .:? "insert_banks_one")
 
 newtype InsertBankOneInsert_banks_one = InsertBankOneInsert_banks_one
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,8 +34,8 @@ instance FromJSON InsertBankOneInsert_banks_one where
     withObject "InsertBankOneInsert_banks_one" (\v -> InsertBankOneInsert_banks_one <$> v .: "id")
 
 data InsertBankOneArgs = InsertBankOneArgs
-  { object :: banks_insert_input,
-    on_conflict :: Maybe banks_on_conflict
+  { object :: Banks_insert_input,
+    on_conflict :: Maybe Banks_on_conflict
   }
   deriving (Generic, Show, Eq)
 

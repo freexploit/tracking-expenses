@@ -7,6 +7,10 @@
 module Schema.Schema where
 
 import Data.Morpheus.Client.CodeGen.Internal
+import Types 
+import Data.UUID.V7 (UUID)
+import Data.Time (UTCTime)
+import Data.Geospatial (GeospatialGeometry)
 
 data String_comparison_exp = String_comparison_exp
   { _eq :: Maybe String,
@@ -15,7 +19,7 @@ data String_comparison_exp = String_comparison_exp
     _ilike :: Maybe String,
     _in :: Maybe [String],
     _iregex :: Maybe String,
-    _is_null :: Maybe Boolean,
+    _is_null :: Maybe Bool,
     _like :: Maybe String,
     _lt :: Maybe String,
     _lte :: Maybe String,
@@ -56,11 +60,11 @@ instance ToJSON String_comparison_exp where
       ]
 
 data Banks_bool_exp = Banks_bool_exp
-  { _and :: Maybe [banks_bool_exp],
-    _not :: Maybe banks_bool_exp,
-    _or :: Maybe [banks_bool_exp],
-    id :: Maybe uuid_comparison_exp,
-    location :: Maybe geography_comparison_exp,
+  { _and :: Maybe [Banks_bool_exp],
+    _not :: Maybe Banks_bool_exp,
+    _or :: Maybe [Banks_bool_exp],
+    id :: Maybe Uuid_comparison_exp,
+    location :: Maybe Geography_comparison_exp,
     name :: Maybe String_comparison_exp,
     notification_email :: Maybe String_comparison_exp
   }
@@ -95,8 +99,8 @@ instance ToJSON Banks_constraint where
     Banks_constraintBanks_pkey -> "banks_pkey"
 
 data Banks_insert_input = Banks_insert_input
-  { id :: Maybe uuid,
-    location :: Maybe geography,
+  { id :: Maybe UUID,
+    location :: Maybe Geography,
     name :: Maybe String,
     notification_email :: Maybe String
   }
@@ -112,9 +116,9 @@ instance ToJSON Banks_insert_input where
       ]
 
 data Banks_on_conflict = Banks_on_conflict
-  { constraint :: banks_constraint,
-    update_columns :: [banks_update_column],
-    where :: Maybe banks_bool_exp
+  { constraint :: Banks_constraint,
+    update_columns :: [Banks_update_column],
+    _where :: Maybe Banks_bool_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -127,10 +131,10 @@ instance ToJSON Banks_on_conflict where
       ]
 
 data Banks_order_by = Banks_order_by
-  { id :: Maybe order_by,
-    location :: Maybe order_by,
-    name :: Maybe order_by,
-    notification_email :: Maybe order_by
+  { id :: Maybe Order_by,
+    location :: Maybe Order_by,
+    name :: Maybe Order_by,
+    notification_email :: Maybe Order_by
   }
   deriving (Generic, Show, Eq)
 
@@ -144,7 +148,7 @@ instance ToJSON Banks_order_by where
       ]
 
 newtype Banks_pk_columns_input = Banks_pk_columns_input
-  { id :: uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -177,8 +181,8 @@ instance ToJSON Banks_select_column where
     Banks_select_columnNotification_email -> "notification_email"
 
 data Banks_set_input = Banks_set_input
-  { id :: Maybe uuid,
-    location :: Maybe geography,
+  { id :: Maybe UUID,
+    location :: Maybe Geography,
     name :: Maybe String,
     notification_email :: Maybe String
   }
@@ -194,8 +198,8 @@ instance ToJSON Banks_set_input where
       ]
 
 data Banks_stream_cursor_input = Banks_stream_cursor_input
-  { initial_value :: banks_stream_cursor_value_input,
-    ordering :: Maybe cursor_ordering
+  { initial_value :: Banks_stream_cursor_value_input,
+    ordering :: Maybe Cursor_ordering
   }
   deriving (Generic, Show, Eq)
 
@@ -207,8 +211,8 @@ instance ToJSON Banks_stream_cursor_input where
       ]
 
 data Banks_stream_cursor_value_input = Banks_stream_cursor_value_input
-  { id :: Maybe uuid,
-    location :: Maybe geography,
+  { id :: Maybe UUID,
+    location :: Maybe Geography,
     name :: Maybe String,
     notification_email :: Maybe String
   }
@@ -246,8 +250,8 @@ instance ToJSON Banks_update_column where
     Banks_update_columnNotification_email -> "notification_email"
 
 data Banks_updates = Banks_updates
-  { _set :: Maybe banks_set_input,
-    where :: banks_bool_exp
+  { _set :: Maybe Banks_set_input,
+    _where :: Banks_bool_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -259,15 +263,15 @@ instance ToJSON Banks_updates where
       ]
 
 data Card_type_comparison_exp = Card_type_comparison_exp
-  { _eq :: Maybe card_type,
-    _gt :: Maybe card_type,
-    _gte :: Maybe card_type,
-    _in :: Maybe [card_type],
-    _is_null :: Maybe Boolean,
-    _lt :: Maybe card_type,
-    _lte :: Maybe card_type,
-    _neq :: Maybe card_type,
-    _nin :: Maybe [card_type]
+  { _eq :: Maybe CardType,
+    _gt :: Maybe CardType,
+    _gte :: Maybe CardType,
+    _in :: Maybe [CardType],
+    _is_null :: Maybe Bool,
+    _lt :: Maybe CardType,
+    _lte :: Maybe CardType,
+    _neq :: Maybe CardType,
+    _nin :: Maybe [CardType]
   }
   deriving (Generic, Show, Eq)
 
@@ -286,11 +290,11 @@ instance ToJSON Card_type_comparison_exp where
       ]
 
 data Commerces_bool_exp = Commerces_bool_exp
-  { _and :: Maybe [commerces_bool_exp],
-    _not :: Maybe commerces_bool_exp,
-    _or :: Maybe [commerces_bool_exp],
-    id :: Maybe uuid_comparison_exp,
-    location :: Maybe geography_comparison_exp,
+  { _and :: Maybe [Commerces_bool_exp],
+    _not :: Maybe Commerces_bool_exp,
+    _or :: Maybe [Commerces_bool_exp],
+    id :: Maybe Uuid_comparison_exp,
+    location :: Maybe Geography_comparison_exp,
     name :: Maybe String_comparison_exp
   }
   deriving (Generic, Show, Eq)
@@ -319,8 +323,8 @@ instance ToJSON Commerces_constraint where
     Commerces_constraintCommerces_pkey -> "commerces_pkey"
 
 data Commerces_insert_input = Commerces_insert_input
-  { id :: Maybe uuid,
-    location :: Maybe geography,
+  { id :: Maybe UUID,
+    location :: Maybe Geography,
     name :: Maybe String
   }
   deriving (Generic, Show, Eq)
@@ -334,9 +338,9 @@ instance ToJSON Commerces_insert_input where
       ]
 
 data Commerces_on_conflict = Commerces_on_conflict
-  { constraint :: commerces_constraint,
-    update_columns :: [commerces_update_column],
-    where :: Maybe commerces_bool_exp
+  { constraint :: Commerces_constraint,
+    update_columns :: [Commerces_update_column],
+    _where :: Maybe Commerces_bool_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -349,9 +353,9 @@ instance ToJSON Commerces_on_conflict where
       ]
 
 data Commerces_order_by = Commerces_order_by
-  { id :: Maybe order_by,
-    location :: Maybe order_by,
-    name :: Maybe order_by
+  { id :: Maybe Order_by,
+    location :: Maybe Order_by,
+    name :: Maybe Order_by
   }
   deriving (Generic, Show, Eq)
 
@@ -364,7 +368,7 @@ instance ToJSON Commerces_order_by where
       ]
 
 newtype Commerces_pk_columns_input = Commerces_pk_columns_input
-  { id :: uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -394,8 +398,8 @@ instance ToJSON Commerces_select_column where
     Commerces_select_columnName -> "name"
 
 data Commerces_set_input = Commerces_set_input
-  { id :: Maybe uuid,
-    location :: Maybe geography,
+  { id :: Maybe UUID,
+    location :: Maybe Geography,
     name :: Maybe String
   }
   deriving (Generic, Show, Eq)
@@ -409,8 +413,8 @@ instance ToJSON Commerces_set_input where
       ]
 
 data Commerces_stream_cursor_input = Commerces_stream_cursor_input
-  { initial_value :: commerces_stream_cursor_value_input,
-    ordering :: Maybe cursor_ordering
+  { initial_value :: Commerces_stream_cursor_value_input,
+    ordering :: Maybe Cursor_ordering
   }
   deriving (Generic, Show, Eq)
 
@@ -422,8 +426,8 @@ instance ToJSON Commerces_stream_cursor_input where
       ]
 
 data Commerces_stream_cursor_value_input = Commerces_stream_cursor_value_input
-  { id :: Maybe uuid,
-    location :: Maybe geography,
+  { id :: Maybe UUID,
+    location :: Maybe Geography,
     name :: Maybe String
   }
   deriving (Generic, Show, Eq)
@@ -456,8 +460,8 @@ instance ToJSON Commerces_update_column where
     Commerces_update_columnName -> "name"
 
 data Commerces_updates = Commerces_updates
-  { _set :: Maybe commerces_set_input,
-    where :: commerces_bool_exp
+  { _set :: Maybe Commerces_set_input,
+    _where :: Commerces_bool_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -485,15 +489,15 @@ instance ToJSON Cursor_ordering where
     Cursor_orderingDESC -> "DESC"
 
 data Date_comparison_exp = Date_comparison_exp
-  { _eq :: Maybe date,
-    _gt :: Maybe date,
-    _gte :: Maybe date,
-    _in :: Maybe [date],
-    _is_null :: Maybe Boolean,
-    _lt :: Maybe date,
-    _lte :: Maybe date,
-    _neq :: Maybe date,
-    _nin :: Maybe [date]
+  { _eq :: Maybe UTCTime,
+    _gt :: Maybe UTCTime,
+    _gte :: Maybe UTCTime,
+    _in :: Maybe [UTCTime],
+    _is_null :: Maybe Bool,
+    _lt :: Maybe UTCTime,
+    _lte :: Maybe UTCTime,
+    _neq :: Maybe UTCTime,
+    _nin :: Maybe [UTCTime]
   }
   deriving (Generic, Show, Eq)
 
@@ -512,17 +516,17 @@ instance ToJSON Date_comparison_exp where
       ]
 
 data Expenses_bool_exp = Expenses_bool_exp
-  { _and :: Maybe [expenses_bool_exp],
-    _not :: Maybe expenses_bool_exp,
-    _or :: Maybe [expenses_bool_exp],
-    amount :: Maybe money_comparison_exp,
-    bank_id :: Maybe uuid_comparison_exp,
+  { _and :: Maybe [Expenses_bool_exp],
+    _not :: Maybe Expenses_bool_exp,
+    _or :: Maybe [Expenses_bool_exp],
+    amount :: Maybe Money_comparison_exp,
+    bank_id :: Maybe Uuid_comparison_exp,
     card_number :: Maybe String_comparison_exp,
-    card_type :: Maybe card_type_comparison_exp,
-    commerce_id :: Maybe uuid_comparison_exp,
+    card_type :: Maybe Card_type_comparison_exp,
+    commerce_id :: Maybe Uuid_comparison_exp,
     currency :: Maybe String_comparison_exp,
-    id :: Maybe uuid_comparison_exp,
-    purchase_date :: Maybe date_comparison_exp
+    id :: Maybe Uuid_comparison_exp,
+    purchase_date :: Maybe Date_comparison_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -555,7 +559,7 @@ instance ToJSON Expenses_constraint where
     Expenses_constraintExpenses_pkey -> "expenses_pkey"
 
 newtype Expenses_inc_input = Expenses_inc_input
-  { amount :: Maybe money
+  { amount :: Maybe Money
   }
   deriving (Generic, Show, Eq)
 
@@ -566,14 +570,14 @@ instance ToJSON Expenses_inc_input where
       ]
 
 data Expenses_insert_input = Expenses_insert_input
-  { amount :: Maybe money,
-    bank_id :: Maybe uuid,
+  { amount :: Maybe Money,
+    bank_id :: Maybe UUID,
     card_number :: Maybe String,
-    card_type :: Maybe card_type,
-    commerce_id :: Maybe uuid,
+    card_type :: Maybe CardType,
+    commerce_id :: Maybe UUID,
     currency :: Maybe String,
-    id :: Maybe uuid,
-    purchase_date :: Maybe date
+    id :: Maybe UUID,
+    purchase_date :: Maybe UTCTime
   }
   deriving (Generic, Show, Eq)
 
@@ -591,9 +595,9 @@ instance ToJSON Expenses_insert_input where
       ]
 
 data Expenses_on_conflict = Expenses_on_conflict
-  { constraint :: expenses_constraint,
-    update_columns :: [expenses_update_column],
-    where :: Maybe expenses_bool_exp
+  { constraint :: Expenses_constraint,
+    update_columns :: [Expenses_update_column],
+    _where :: Maybe Expenses_bool_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -606,14 +610,14 @@ instance ToJSON Expenses_on_conflict where
       ]
 
 data Expenses_order_by = Expenses_order_by
-  { amount :: Maybe order_by,
-    bank_id :: Maybe order_by,
-    card_number :: Maybe order_by,
-    card_type :: Maybe order_by,
-    commerce_id :: Maybe order_by,
-    currency :: Maybe order_by,
-    id :: Maybe order_by,
-    purchase_date :: Maybe order_by
+  { amount :: Maybe Order_by,
+    bank_id :: Maybe Order_by,
+    card_number :: Maybe Order_by,
+    card_type :: Maybe Order_by,
+    commerce_id :: Maybe Order_by,
+    currency :: Maybe Order_by,
+    id :: Maybe Order_by,
+    purchase_date :: Maybe Order_by
   }
   deriving (Generic, Show, Eq)
 
@@ -631,7 +635,7 @@ instance ToJSON Expenses_order_by where
       ]
 
 newtype Expenses_pk_columns_input = Expenses_pk_columns_input
-  { id :: uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -676,14 +680,14 @@ instance ToJSON Expenses_select_column where
     Expenses_select_columnPurchase_date -> "purchase_date"
 
 data Expenses_set_input = Expenses_set_input
-  { amount :: Maybe money,
-    bank_id :: Maybe uuid,
+  { amount :: Maybe Money,
+    bank_id :: Maybe UUID,
     card_number :: Maybe String,
-    card_type :: Maybe card_type,
-    commerce_id :: Maybe uuid,
+    card_type :: Maybe CardType,
+    commerce_id :: Maybe UUID,
     currency :: Maybe String,
-    id :: Maybe uuid,
-    purchase_date :: Maybe date
+    id :: Maybe UUID,
+    purchase_date :: Maybe UTCTime
   }
   deriving (Generic, Show, Eq)
 
@@ -701,8 +705,8 @@ instance ToJSON Expenses_set_input where
       ]
 
 data Expenses_stream_cursor_input = Expenses_stream_cursor_input
-  { initial_value :: expenses_stream_cursor_value_input,
-    ordering :: Maybe cursor_ordering
+  { initial_value :: Expenses_stream_cursor_value_input,
+    ordering :: Maybe Cursor_ordering
   }
   deriving (Generic, Show, Eq)
 
@@ -714,14 +718,14 @@ instance ToJSON Expenses_stream_cursor_input where
       ]
 
 data Expenses_stream_cursor_value_input = Expenses_stream_cursor_value_input
-  { amount :: Maybe money,
-    bank_id :: Maybe uuid,
+  { amount :: Maybe Money,
+    bank_id :: Maybe UUID,
     card_number :: Maybe String,
-    card_type :: Maybe card_type,
-    commerce_id :: Maybe uuid,
+    card_type :: Maybe CardType,
+    commerce_id :: Maybe UUID,
     currency :: Maybe String,
-    id :: Maybe uuid,
-    purchase_date :: Maybe date
+    id :: Maybe UUID,
+    purchase_date :: Maybe UTCTime
   }
   deriving (Generic, Show, Eq)
 
@@ -773,9 +777,9 @@ instance ToJSON Expenses_update_column where
     Expenses_update_columnPurchase_date -> "purchase_date"
 
 data Expenses_updates = Expenses_updates
-  { _inc :: Maybe expenses_inc_input,
-    _set :: Maybe expenses_set_input,
-    where :: expenses_bool_exp
+  { _inc :: Maybe Expenses_inc_input,
+    _set :: Maybe Expenses_set_input,
+    _where :: Expenses_bool_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -788,7 +792,7 @@ instance ToJSON Expenses_updates where
       ]
 
 newtype Geography_cast_exp = Geography_cast_exp
-  { geometry :: Maybe geometry_comparison_exp
+  { geometry :: Maybe Geometry_comparison_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -799,18 +803,18 @@ instance ToJSON Geography_cast_exp where
       ]
 
 data Geography_comparison_exp = Geography_comparison_exp
-  { _cast :: Maybe geography_cast_exp,
-    _eq :: Maybe geography,
-    _gt :: Maybe geography,
-    _gte :: Maybe geography,
-    _in :: Maybe [geography],
-    _is_null :: Maybe Boolean,
-    _lt :: Maybe geography,
-    _lte :: Maybe geography,
-    _neq :: Maybe geography,
-    _nin :: Maybe [geography],
-    _st_d_within :: Maybe st_d_within_geography_input,
-    _st_intersects :: Maybe geography
+  { _cast :: Maybe Geography_cast_exp,
+    _eq :: Maybe Geography,
+    _gt :: Maybe Geography,
+    _gte :: Maybe Geography,
+    _in :: Maybe [Geography],
+    _is_null :: Maybe Bool,
+    _lt :: Maybe Geography,
+    _lte :: Maybe Geography,
+    _neq :: Maybe Geography,
+    _nin :: Maybe [Geography],
+    _st_d_within :: Maybe St_d_within_geography_input,
+    _st_intersects :: Maybe Geography
   }
   deriving (Generic, Show, Eq)
 
@@ -832,7 +836,7 @@ instance ToJSON Geography_comparison_exp where
       ]
 
 newtype Geometry_cast_exp = Geometry_cast_exp
-  { geography :: Maybe geography_comparison_exp
+  { geography :: Maybe Geography_comparison_exp
   }
   deriving (Generic, Show, Eq)
 
@@ -843,26 +847,26 @@ instance ToJSON Geometry_cast_exp where
       ]
 
 data Geometry_comparison_exp = Geometry_comparison_exp
-  { _cast :: Maybe geometry_cast_exp,
-    _eq :: Maybe geometry,
-    _gt :: Maybe geometry,
-    _gte :: Maybe geometry,
-    _in :: Maybe [geometry],
-    _is_null :: Maybe Boolean,
-    _lt :: Maybe geometry,
-    _lte :: Maybe geometry,
-    _neq :: Maybe geometry,
-    _nin :: Maybe [geometry],
-    _st_3d_d_within :: Maybe st_d_within_input,
-    _st_3d_intersects :: Maybe geometry,
-    _st_contains :: Maybe geometry,
-    _st_crosses :: Maybe geometry,
-    _st_d_within :: Maybe st_d_within_input,
-    _st_equals :: Maybe geometry,
-    _st_intersects :: Maybe geometry,
-    _st_overlaps :: Maybe geometry,
-    _st_touches :: Maybe geometry,
-    _st_within :: Maybe geometry
+  { _cast :: Maybe Geometry_cast_exp,
+    _eq :: Maybe GeospatialGeometry,
+    _gt :: Maybe GeospatialGeometry,
+    _gte :: Maybe GeospatialGeometry,
+    _in :: Maybe [GeospatialGeometry],
+    _is_null :: Maybe Bool,
+    _lt :: Maybe GeospatialGeometry,
+    _lte :: Maybe GeospatialGeometry,
+    _neq :: Maybe GeospatialGeometry,
+    _nin :: Maybe [GeospatialGeometry],
+    _st_3d_d_within :: Maybe St_d_within_input,
+    _st_3d_intersects :: Maybe GeospatialGeometry,
+    _st_contains :: Maybe GeospatialGeometry,
+    _st_crosses :: Maybe GeospatialGeometry,
+    _st_d_within :: Maybe St_d_within_input,
+    _st_equals :: Maybe GeospatialGeometry,
+    _st_intersects :: Maybe GeospatialGeometry,
+    _st_overlaps :: Maybe GeospatialGeometry,
+    _st_touches :: Maybe GeospatialGeometry,
+    _st_within :: Maybe GeospatialGeometry
   }
   deriving (Generic, Show, Eq)
 
@@ -892,15 +896,15 @@ instance ToJSON Geometry_comparison_exp where
       ]
 
 data Money_comparison_exp = Money_comparison_exp
-  { _eq :: Maybe money,
-    _gt :: Maybe money,
-    _gte :: Maybe money,
-    _in :: Maybe [money],
-    _is_null :: Maybe Boolean,
-    _lt :: Maybe money,
-    _lte :: Maybe money,
-    _neq :: Maybe money,
-    _nin :: Maybe [money]
+  { _eq :: Maybe Money,
+    _gt :: Maybe Money,
+    _gte :: Maybe Money,
+    _in :: Maybe [Money],
+    _is_null :: Maybe Bool,
+    _lt :: Maybe Money,
+    _lte :: Maybe Money,
+    _neq :: Maybe Money,
+    _nin :: Maybe [Money]
   }
   deriving (Generic, Show, Eq)
 
@@ -948,8 +952,8 @@ instance ToJSON Order_by where
 
 data St_d_within_geography_input = St_d_within_geography_input
   { distance :: Float,
-    from :: geography,
-    use_spheroid :: Maybe Boolean
+    from :: Geography,
+    use_spheroid :: Maybe Bool
   }
   deriving (Generic, Show, Eq)
 
@@ -963,7 +967,7 @@ instance ToJSON St_d_within_geography_input where
 
 data St_d_within_input = St_d_within_input
   { distance :: Float,
-    from :: geometry
+    from :: GeospatialGeometry
   }
   deriving (Generic, Show, Eq)
 
@@ -975,15 +979,15 @@ instance ToJSON St_d_within_input where
       ]
 
 data Uuid_comparison_exp = Uuid_comparison_exp
-  { _eq :: Maybe uuid,
-    _gt :: Maybe uuid,
-    _gte :: Maybe uuid,
-    _in :: Maybe [uuid],
-    _is_null :: Maybe Boolean,
-    _lt :: Maybe uuid,
-    _lte :: Maybe uuid,
-    _neq :: Maybe uuid,
-    _nin :: Maybe [uuid]
+  { _eq :: Maybe UUID,
+    _gt :: Maybe UUID,
+    _gte :: Maybe UUID,
+    _in :: Maybe [UUID],
+    _is_null :: Maybe Bool,
+    _lt :: Maybe UUID,
+    _lte :: Maybe UUID,
+    _neq :: Maybe UUID,
+    _nin :: Maybe [UUID]
   }
   deriving (Generic, Show, Eq)
 

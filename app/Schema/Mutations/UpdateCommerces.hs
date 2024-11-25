@@ -6,7 +6,8 @@
 module Schema.Mutations.UpdateCommerces where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType UpdateCommerces where
   type RequestArgs UpdateCommerces = UpdateCommercesArgs
@@ -34,7 +35,7 @@ instance FromJSON UpdateCommercesUpdate_commerces where
     withObject "UpdateCommercesUpdate_commerces" (\v -> UpdateCommercesUpdate_commerces <$> v .: "affected_rows" <*> v .: "returning")
 
 newtype UpdateCommercesUpdate_commercesReturning = UpdateCommercesUpdate_commercesReturning
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -43,8 +44,8 @@ instance FromJSON UpdateCommercesUpdate_commercesReturning where
     withObject "UpdateCommercesUpdate_commercesReturning" (\v -> UpdateCommercesUpdate_commercesReturning <$> v .: "id")
 
 data UpdateCommercesArgs = UpdateCommercesArgs
-  { where :: commerces_bool_exp,
-    _set :: Maybe commerces_set_input
+  { _where :: Commerces_bool_exp,
+    _set :: Maybe Commerces_set_input
   }
   deriving (Generic, Show, Eq)
 

@@ -3,10 +3,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.DeleteExpense_by_id where
+module Schema.Mutations.DeleteExpenseById where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Data.UUID.V7 (UUID)
 
 instance RequestType DeleteExpenseById where
   type RequestArgs DeleteExpenseById = DeleteExpenseByIdArgs
@@ -24,7 +24,7 @@ instance FromJSON DeleteExpenseById where
     withObject "DeleteExpenseById" (\v -> DeleteExpenseById <$> v .:? "delete_expenses_by_pk")
 
 newtype DeleteExpenseByIdDelete_expenses_by_pk = DeleteExpenseByIdDelete_expenses_by_pk
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,7 +33,7 @@ instance FromJSON DeleteExpenseByIdDelete_expenses_by_pk where
     withObject "DeleteExpenseByIdDelete_expenses_by_pk" (\v -> DeleteExpenseByIdDelete_expenses_by_pk <$> v .: "id")
 
 newtype DeleteExpenseByIdArgs = DeleteExpenseByIdArgs
-  { id :: uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 

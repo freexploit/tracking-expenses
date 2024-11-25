@@ -3,10 +3,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.UpdateBank_by_id where
+module Schema.Mutations.UpdateBankById where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType UpdateBankById where
   type RequestArgs UpdateBankById = UpdateBankByIdArgs
@@ -24,7 +25,7 @@ instance FromJSON UpdateBankById where
     withObject "UpdateBankById" (\v -> UpdateBankById <$> v .:? "update_banks_by_pk")
 
 newtype UpdateBankByIdUpdate_banks_by_pk = UpdateBankByIdUpdate_banks_by_pk
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,8 +34,8 @@ instance FromJSON UpdateBankByIdUpdate_banks_by_pk where
     withObject "UpdateBankByIdUpdate_banks_by_pk" (\v -> UpdateBankByIdUpdate_banks_by_pk <$> v .: "id")
 
 data UpdateBankByIdArgs = UpdateBankByIdArgs
-  { pk_columns :: banks_pk_columns_input,
-    _set :: Maybe banks_set_input
+  { pk_columns :: Banks_pk_columns_input,
+    _set :: Maybe Banks_set_input
   }
   deriving (Generic, Show, Eq)
 

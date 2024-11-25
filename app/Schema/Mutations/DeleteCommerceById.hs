@@ -3,10 +3,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.DeleteCommerce_by_id where
+module Schema.Mutations.DeleteCommerceById where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Data.UUID.V7 (UUID)
 
 instance RequestType DeleteCommerceById where
   type RequestArgs DeleteCommerceById = DeleteCommerceByIdArgs
@@ -24,7 +24,7 @@ instance FromJSON DeleteCommerceById where
     withObject "DeleteCommerceById" (\v -> DeleteCommerceById <$> v .:? "delete_commerces_by_pk")
 
 newtype DeleteCommerceByIdDelete_commerces_by_pk = DeleteCommerceByIdDelete_commerces_by_pk
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,7 +33,7 @@ instance FromJSON DeleteCommerceByIdDelete_commerces_by_pk where
     withObject "DeleteCommerceByIdDelete_commerces_by_pk" (\v -> DeleteCommerceByIdDelete_commerces_by_pk <$> v .: "id")
 
 newtype DeleteCommerceByIdArgs = DeleteCommerceByIdArgs
-  { id :: uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 

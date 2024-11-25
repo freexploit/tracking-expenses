@@ -3,10 +3,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.InsertCommerce_one where
+module Schema.Mutations.InsertCommerceOne where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType InsertCommerceOne where
   type RequestArgs InsertCommerceOne = InsertCommerceOneArgs
@@ -24,7 +25,7 @@ instance FromJSON InsertCommerceOne where
     withObject "InsertCommerceOne" (\v -> InsertCommerceOne <$> v .:? "insert_commerces_one")
 
 newtype InsertCommerceOneInsert_commerces_one = InsertCommerceOneInsert_commerces_one
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,8 +34,8 @@ instance FromJSON InsertCommerceOneInsert_commerces_one where
     withObject "InsertCommerceOneInsert_commerces_one" (\v -> InsertCommerceOneInsert_commerces_one <$> v .: "id")
 
 data InsertCommerceOneArgs = InsertCommerceOneArgs
-  { object :: commerces_insert_input,
-    on_conflict :: Maybe commerces_on_conflict
+  { object :: Commerces_insert_input,
+    on_conflict :: Maybe Commerces_on_conflict
   }
   deriving (Generic, Show, Eq)
 

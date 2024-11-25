@@ -6,7 +6,8 @@
 module Schema.Mutations.UpdateExpenses where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType UpdateExpenses where
   type RequestArgs UpdateExpenses = UpdateExpensesArgs
@@ -34,7 +35,7 @@ instance FromJSON UpdateExpensesUpdate_expenses where
     withObject "UpdateExpensesUpdate_expenses" (\v -> UpdateExpensesUpdate_expenses <$> v .: "affected_rows" <*> v .: "returning")
 
 newtype UpdateExpensesUpdate_expensesReturning = UpdateExpensesUpdate_expensesReturning
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -43,9 +44,9 @@ instance FromJSON UpdateExpensesUpdate_expensesReturning where
     withObject "UpdateExpensesUpdate_expensesReturning" (\v -> UpdateExpensesUpdate_expensesReturning <$> v .: "id")
 
 data UpdateExpensesArgs = UpdateExpensesArgs
-  { where :: expenses_bool_exp,
-    _set :: Maybe expenses_set_input,
-    _inc :: Maybe expenses_inc_input
+  { _where :: Expenses_bool_exp,
+    _set :: Maybe Expenses_set_input,
+    _inc :: Maybe Expenses_inc_input
   }
   deriving (Generic, Show, Eq)
 

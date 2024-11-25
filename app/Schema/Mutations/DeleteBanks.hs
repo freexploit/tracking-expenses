@@ -6,7 +6,9 @@
 module Schema.Mutations.DeleteBanks where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
+import Types
 
 instance RequestType DeleteBanks where
   type RequestArgs DeleteBanks = DeleteBanksArgs
@@ -34,7 +36,7 @@ instance FromJSON DeleteBanksDelete_banks where
     withObject "DeleteBanksDelete_banks" (\v -> DeleteBanksDelete_banks <$> v .: "affected_rows" <*> v .: "returning")
 
 data DeleteBanksDelete_banksReturning = DeleteBanksDelete_banksReturning
-  { id :: Uuid,
+  { id :: UUID,
     location :: Maybe Geography,
     name :: String,
     notification_email :: Maybe String
@@ -46,7 +48,7 @@ instance FromJSON DeleteBanksDelete_banksReturning where
     withObject "DeleteBanksDelete_banksReturning" (\v -> DeleteBanksDelete_banksReturning <$> v .: "id" <*> v .:? "location" <*> v .: "name" <*> v .:? "notification_email")
 
 newtype DeleteBanksArgs = DeleteBanksArgs
-  { where :: banks_bool_exp
+  { _where :: Banks_bool_exp
   }
   deriving (Generic, Show, Eq)
 

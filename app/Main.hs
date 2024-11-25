@@ -106,10 +106,6 @@ configFromEnv = do
     let graph = GraphqlConfig <$> url' <*> auth_token
     return <| Config <$> imap <*> graph
 
-
-
-
-
 main :: IO ()
 main = do
     args <- execParser opts

@@ -3,10 +3,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.UpdateExpense_by_id where
+module Schema.Mutations.UpdateExpenseById where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType UpdateExpenseById where
   type RequestArgs UpdateExpenseById = UpdateExpenseByIdArgs
@@ -24,7 +25,7 @@ instance FromJSON UpdateExpenseById where
     withObject "UpdateExpenseById" (\v -> UpdateExpenseById <$> v .:? "update_expenses_by_pk")
 
 newtype UpdateExpenseByIdUpdate_expenses_by_pk = UpdateExpenseByIdUpdate_expenses_by_pk
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,9 +34,9 @@ instance FromJSON UpdateExpenseByIdUpdate_expenses_by_pk where
     withObject "UpdateExpenseByIdUpdate_expenses_by_pk" (\v -> UpdateExpenseByIdUpdate_expenses_by_pk <$> v .: "id")
 
 data UpdateExpenseByIdArgs = UpdateExpenseByIdArgs
-  { pk_columns :: expenses_pk_columns_input,
-    _set :: Maybe expenses_set_input,
-    _inc :: Maybe expenses_inc_input
+  { pk_columns :: Expenses_pk_columns_input,
+    _set :: Maybe Expenses_set_input,
+    _inc :: Maybe Expenses_inc_input
   }
   deriving (Generic, Show, Eq)
 

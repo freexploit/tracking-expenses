@@ -7,6 +7,7 @@ module Schema.Mutations.UpdateBanks where
 
 import Data.Morpheus.Client.CodeGen.Internal
 import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType UpdateBanks where
   type RequestArgs UpdateBanks = UpdateBanksArgs
@@ -34,7 +35,7 @@ instance FromJSON UpdateBanksUpdate_banks where
     withObject "UpdateBanksUpdate_banks" (\v -> UpdateBanksUpdate_banks <$> v .: "affected_rows" <*> v .: "returning")
 
 newtype UpdateBanksUpdate_banksReturning = UpdateBanksUpdate_banksReturning
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -43,8 +44,8 @@ instance FromJSON UpdateBanksUpdate_banksReturning where
     withObject "UpdateBanksUpdate_banksReturning" (\v -> UpdateBanksUpdate_banksReturning <$> v .: "id")
 
 data UpdateBanksArgs = UpdateBanksArgs
-  { _where :: banks_bool_exp,
-    _set :: Maybe banks_set_input
+  { _where :: Banks_bool_exp,
+    _set :: Maybe Banks_set_input
   }
   deriving (Generic, Show, Eq)
 

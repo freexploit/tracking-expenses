@@ -6,7 +6,7 @@
 module Schema.Mutations.DeleteExpenses where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
 
 instance RequestType DeleteExpenses where
   type RequestArgs DeleteExpenses = DeleteExpensesArgs
@@ -33,7 +33,7 @@ instance FromJSON DeleteExpensesDelete_expenses where
     withObject "DeleteExpensesDelete_expenses" (\v -> DeleteExpensesDelete_expenses <$> v .: "affected_rows")
 
 newtype DeleteExpensesArgs = DeleteExpensesArgs
-  { where :: expenses_bool_exp
+  { _where :: Expenses_bool_exp
   }
   deriving (Generic, Show, Eq)
 

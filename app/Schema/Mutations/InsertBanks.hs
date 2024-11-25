@@ -6,7 +6,8 @@
 module Schema.Mutations.InsertBanks where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType InsertBanks where
   type RequestArgs InsertBanks = InsertBanksArgs
@@ -34,7 +35,7 @@ instance FromJSON InsertBanksInsert_banks where
     withObject "InsertBanksInsert_banks" (\v -> InsertBanksInsert_banks <$> v .: "affected_rows" <*> v .: "returning")
 
 newtype InsertBanksInsert_banksReturning = InsertBanksInsert_banksReturning
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -43,8 +44,8 @@ instance FromJSON InsertBanksInsert_banksReturning where
     withObject "InsertBanksInsert_banksReturning" (\v -> InsertBanksInsert_banksReturning <$> v .: "id")
 
 data InsertBanksArgs = InsertBanksArgs
-  { objects :: [banks_insert_input],
-    on_conflict :: Maybe banks_on_conflict
+  { objects :: [Banks_insert_input],
+    on_conflict :: Maybe Banks_on_conflict
   }
   deriving (Generic, Show, Eq)
 

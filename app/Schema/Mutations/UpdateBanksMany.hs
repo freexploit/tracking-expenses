@@ -3,10 +3,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.UpdateBanks_many where
+module Schema.Mutations.UpdateBanksMany where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
 
 instance RequestType UpdateBanksMany where
   type RequestArgs UpdateBanksMany = UpdateBanksManyArgs
@@ -33,7 +33,7 @@ instance FromJSON UpdateBanksManyUpdate_banks_many where
     withObject "UpdateBanksManyUpdate_banks_many" (\v -> UpdateBanksManyUpdate_banks_many <$> v .: "affected_rows")
 
 newtype UpdateBanksManyArgs = UpdateBanksManyArgs
-  { updates :: [banks_updates]
+  { updates :: [Banks_updates]
   }
   deriving (Generic, Show, Eq)
 

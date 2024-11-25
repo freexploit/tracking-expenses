@@ -36,6 +36,7 @@ executable tracking-expenses
         Graphql
         MonadTime
         ImapMonad
+        Types
         Schema.Schema
         Schema.Mutations.UpdateCommerces
         Schema.Mutations.DeleteBanks

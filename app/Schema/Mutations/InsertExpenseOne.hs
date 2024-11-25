@@ -3,10 +3,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.InsertExpense_one where
+module Schema.Mutations.InsertExpenseOne where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType InsertExpenseOne where
   type RequestArgs InsertExpenseOne = InsertExpenseOneArgs
@@ -24,7 +25,7 @@ instance FromJSON InsertExpenseOne where
     withObject "InsertExpenseOne" (\v -> InsertExpenseOne <$> v .:? "insert_expenses_one")
 
 newtype InsertExpenseOneInsert_expenses_one = InsertExpenseOneInsert_expenses_one
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,8 +34,8 @@ instance FromJSON InsertExpenseOneInsert_expenses_one where
     withObject "InsertExpenseOneInsert_expenses_one" (\v -> InsertExpenseOneInsert_expenses_one <$> v .: "id")
 
 data InsertExpenseOneArgs = InsertExpenseOneArgs
-  { object :: expenses_insert_input,
-    on_conflict :: Maybe expenses_on_conflict
+  { object :: Expenses_insert_input,
+    on_conflict :: Maybe Expenses_on_conflict
   }
   deriving (Generic, Show, Eq)
 

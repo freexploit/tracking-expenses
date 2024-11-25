@@ -6,7 +6,8 @@
 module Schema.Mutations.InsertCommerces where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Schema.Schema
+import Data.UUID.V7 (UUID)
 
 instance RequestType InsertCommerces where
   type RequestArgs InsertCommerces = InsertCommercesArgs
@@ -34,7 +35,7 @@ instance FromJSON InsertCommercesInsert_commerces where
     withObject "InsertCommercesInsert_commerces" (\v -> InsertCommercesInsert_commerces <$> v .: "affected_rows" <*> v .: "returning")
 
 newtype InsertCommercesInsert_commercesReturning = InsertCommercesInsert_commercesReturning
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -43,8 +44,8 @@ instance FromJSON InsertCommercesInsert_commercesReturning where
     withObject "InsertCommercesInsert_commercesReturning" (\v -> InsertCommercesInsert_commercesReturning <$> v .: "id")
 
 data InsertCommercesArgs = InsertCommercesArgs
-  { objects :: [commerces_insert_input],
-    on_conflict :: Maybe commerces_on_conflict
+  { objects :: [Commerces_insert_input],
+    on_conflict :: Maybe Commerces_on_conflict
   }
   deriving (Generic, Show, Eq)
 

@@ -3,10 +3,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema.Mutations.DeleteBank_by_id where
+module Schema.Mutations.DeleteBankById where
 
 import Data.Morpheus.Client.CodeGen.Internal
-import Schema.Schema_generate
+import Data.UUID.V7 (UUID)
 
 instance RequestType DeleteBankById where
   type RequestArgs DeleteBankById = DeleteBankByIdArgs
@@ -24,7 +24,7 @@ instance FromJSON DeleteBankById where
     withObject "DeleteBankById" (\v -> DeleteBankById <$> v .:? "delete_banks_by_pk")
 
 newtype DeleteBankByIdDelete_banks_by_pk = DeleteBankByIdDelete_banks_by_pk
-  { id :: Uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
@@ -33,7 +33,7 @@ instance FromJSON DeleteBankByIdDelete_banks_by_pk where
     withObject "DeleteBankByIdDelete_banks_by_pk" (\v -> DeleteBankByIdDelete_banks_by_pk <$> v .: "id")
 
 newtype DeleteBankByIdArgs = DeleteBankByIdArgs
-  { id :: uuid
+  { id :: UUID
   }
   deriving (Generic, Show, Eq)
 
