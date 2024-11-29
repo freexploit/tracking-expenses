@@ -15,7 +15,7 @@ import Scrapper (proccesHtml, parseExpense)
 import Flow
 import Network.HaskellNet.IMAP
 import qualified Data.ByteString.Char8 as B
-import Control.Monad ( forM_, forM )
+import Control.Monad ( forM )
 import Data.IMF ( body, message, parse, HasHeaders )
 import Data.MIME (mime, MIMEMessage, contentType, matchContentType, entities)
 import Control.Lens (view, filtered)
@@ -43,8 +43,10 @@ isHtml = matchContentType "text" (Just "html") . view contentType
 say :: String -> AppM ()
 say = liftIO . print
 
-proccessEmails :: String -> Int -> AppM ()
-proccessEmails mail days =  do
+
+
+proccessEmails :: String -> Int -> String -> AppM ()
+proccessEmails mail days mailboxname =  do
         imapCreds <- grab @ImapCredentials
         c <- connectServerM  imapCreds.host imapCreds.port
         loginM c imapCreds
@@ -81,15 +83,11 @@ proccessEmails mail days =  do
 
         case expenses' of
             Just exps' -> do
-                --print exps'
                 whatevs <- insertExpenses exps' >>= single 
                 liftIO <| print whatevs
-                return ()
+                moveMails c mailboxname msgs
             Nothing -> liftIO <| print ("Nothing to procces" :: String)
 
-        forM_ msgs \msg' -> do
-            liftIO <| Network.HaskellNet.IMAP.copy c msg' "BAC"
-            liftIO <| store c msg'  <| PlusFlags [Deleted]
 
         logoutM c
 
@@ -110,7 +108,7 @@ main :: IO ()
 main = do
     args <- execParser opts
     config <- configFromEnv
-    runApp (fromJust config) (proccessEmails args.from args.daysSentAgo)
+    runApp (fromJust config) (proccessEmails args.from args.daysSentAgo args.mailbox)
     where
       opts = info (argParser <**> helper )
         ( fullDesc
