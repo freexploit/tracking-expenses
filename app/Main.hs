@@ -31,7 +31,8 @@ import MonadTime
 import Network.HaskellNet.IMAP
 import Network.Socket (PortNumber)
 import Options.Applicative
-import Scrapper (parseExpense, proccesHtml)
+import BacScrapper (parseExpense, proccesHtml)
+import ScrapperBuilder
 
 parseMail :: B.ByteString -> Either String MIMEMessage
 parseMail = parse (message mime)
@@ -60,10 +61,13 @@ proccessEmails mail days mailboxname = do
     let p' = firstOf (entities <. filtered isHtml <. body) <$> parseMail msgContent
     return p'
 
+  let scrapper = flip mkScrapper parseExpense
+
   expenses <- forM mails \m -> do
     case m of
       Right t -> do
-        let expense = fromJust <| parseExpense <. proccesHtml <$> t
+        let input = proccesHtml <$> t
+        let expense = (runScrapper <. scrapper) (fromJust input)
         liftIO <| print expense
         return expense
       Left err -> do
@@ -81,6 +85,7 @@ proccessEmails mail days mailboxname = do
     Nothing -> liftIO <| print ("Nothing to procces" :: String)
 
   logoutM c
+
 
 configFromEnv :: IO (Maybe AppConfig)
 configFromEnv = do

@@ -18,9 +18,9 @@ import Data.Morpheus.Client
   )
 import Schema.Schema
 import Schema.Mutations.InsertExpenses
-import Scrapper
+import BacScrapper
 
-import qualified Scrapper as Sc
+import qualified BacScrapper as Sc
 import qualified Data.ByteString.UTF8 as U
 import qualified Data.Text as T
 import Data.String (fromString)

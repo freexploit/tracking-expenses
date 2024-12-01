@@ -20,7 +20,7 @@ data CardType = VISA
     | AMEX
     | ATM
     | TX
-    deriving(Show, Generic,Eq)
+    deriving(Show, Generic, Eq)
 
 instance FromJSON CardType
 instance ToJSON CardType

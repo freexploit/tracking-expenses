@@ -5,8 +5,9 @@
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE RecordWildCards #-}
 
-module Scrapper where
+module BacScrapper where
 
 import Control.Lens (makeLenses)
 import qualified Data.ByteString.Char8 as B
@@ -23,18 +24,17 @@ import Text.Regex.TDFA
 import Text.StringLike (toString)
 import Types
 
+
 data Bank = Bank
-  { _bank_id :: Maybe UUID,
-    _bank_name :: Maybe String,
-    _bank_location :: Maybe Geography,
+  { _bank_name :: Maybe String,
+    _bank_location :: Maybe String,
     _bank_email :: Maybe String
   }
   deriving (Show, Generic, Eq)
 
 data Commerce = Commerce
-  { _commerce_id :: Maybe UUID,
-    _commerce_name :: Maybe String,
-    _commerce_location :: Maybe Geography
+  { _commerce_name :: Maybe String,
+    _commerce_location :: Maybe String
   }
   deriving (Show, Generic, Eq)
 
@@ -52,6 +52,8 @@ data Expense = Expense
 makeLenses ''Expense
 makeLenses ''Bank
 makeLenses ''Commerce
+
+
 
 containsSubstring :: String -> [String] -> Bool
 containsSubstring sub = any (sub `isInfixOf`)
@@ -86,13 +88,13 @@ parseDate input = do
   let sixHours = 6 * 60 * 60
   return $ addUTCTime sixHours utcDate
 
-parseCommerce :: String -> String -> Maybe Commerce
-parseCommerce name' _ = Just (Commerce Nothing (Just name') Nothing)
+parseCommerce :: Maybe String -> Maybe String -> Maybe Commerce
+parseCommerce name' loc' = Just (Commerce name' loc')
 
 parseExpense :: [[String]] -> Maybe Expense
 parseExpense xs = do
-  commerce' <- head <. tail <$> find ((== "Comercio:") <. head) xs
-  location' <- concat <. tail <$> find ((=~ ("Ciudad.*" :: String)) <. head) xs
+  let commerce' = head <. tail <$> find ((== "Comercio:") <. head) xs
+  let location' = concat <. tail <$> find ((=~ ("Ciudad.*" :: String)) <. head) xs
   fecha <- head <. tail <$> find ((== "Fecha:") <. head) xs
   monto <- head <. tail <$> find ((== "Monto:") <. head) xs
   let cardType = findCardType
@@ -105,8 +107,7 @@ parseExpense xs = do
   where
     findCardType = head <$> find (\x -> head x == "MASTER" || head x == "VISA" || head x == "AMEX" || head x == "ATM" || head x == "TX") xs
 
--- >>> 1 + 1
--- <stderr>: hPutChar: invalid argument (cannot encode character '\8226')
---
+
+
 -- [[["Comercio:","GITHUB"]],[["Ciudad y pa\237s:","+18774484820, Pais no Definido"]],[["Monto:","USD 3.67"]],[["MASTER","************3785"]]
 -- "************3785"

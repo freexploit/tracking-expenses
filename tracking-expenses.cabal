@@ -11,8 +11,6 @@ build-type:         Simple
 extra-doc-files:    CHANGELOG.md
 -- extra-source-files:
 
-data-files:
-    app/Schema/schema.gql
 
 common warnings
     ghc-options:          -Wall
@@ -76,7 +74,8 @@ library
         App
         Config
         Cli
-        Scrapper
+        BacScrapper
+        ScrapperBuilder
         AppEnv
         Graphql
         MonadTime
@@ -136,7 +135,6 @@ executable tracking-expenses
         , morpheus-graphql
         , morpheus-graphql-core
         , morpheus-graphql-client
-        --, morpheus-graphql-code-gen
         , morpheus-graphql-subscriptions
         , tracking-expenses
 
