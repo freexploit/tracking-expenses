@@ -5,7 +5,7 @@ version:            0.1.0.0
 -- description:
 license:            GPL-3.0-only
 author:             Christopher Valerio
-maintainer:         test@test.com
+maintainer:         christopher@valerio.guru
 -- copyright:
 build-type:         Simple
 extra-doc-files:    CHANGELOG.md
@@ -24,10 +24,55 @@ common warnings
                           -fhide-source-paths
                           -Wpartial-fields
 
-executable tracking-expenses
-    import:           warnings
-    main-is:          Main.hs
-    other-modules:
+test-suite spec
+  type:                exitcode-stdio-1.0
+  main-is:             Spec.hs
+  hs-source-dirs:      test
+  build-depends:       
+      base
+    , hspec
+    , hspec-core
+    , hspec-contrib
+    , HUnit 
+    , QuickCheck
+    , tracking-expenses
+  ghc-options:         -Wall -Werror
+  build-tool-depends:
+      hspec-discover:hspec-discover
+  default-language:    Haskell2010
+
+library 
+    hs-source-dirs: src/
+    build-depends:    
+       base ^>=4.18.2.1
+        , geojson
+        , HaskellNet
+        , network
+        , mtl
+        , optparse-applicative
+        , HaskellNet-SSL
+        , bytestring
+        , utf8-string
+        , purebred-email
+        , generic-lens
+        , lens
+        , old-time
+        , time
+        , flow
+        , tagsoup
+        , transformers
+        , text 
+        , regex-tdfa
+        , uuid-types
+        , uuid
+        , mmzk-typeid
+        , aeson
+        , morpheus-graphql
+        , morpheus-graphql-core
+        , morpheus-graphql-client
+        --, morpheus-graphql-code-gen
+        , morpheus-graphql-subscriptions
+    exposed-modules:
         App
         Config
         Cli
@@ -60,6 +105,9 @@ executable tracking-expenses
         Schema.Mutations.DeleteExpenses
         Schema.Mutations.DeleteBankById
 
+executable tracking-expenses
+    import:           warnings
+    main-is:          Main.hs
     -- other-extensions: 
     build-depends:    
        base ^>=4.18.2.1
@@ -90,6 +138,7 @@ executable tracking-expenses
         , morpheus-graphql-client
         --, morpheus-graphql-code-gen
         , morpheus-graphql-subscriptions
+        , tracking-expenses
 
     hs-source-dirs:   app
     default-language: Haskell2010
