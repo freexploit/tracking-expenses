@@ -20,7 +20,7 @@ import Schema.Schema
 import Schema.Mutations.InsertExpenses
 import BacScrapper
 
-import qualified BacScrapper as Sc
+import qualified Types as Sc
 import qualified Data.ByteString.UTF8 as U
 import qualified Data.Text as T
 import Data.String (fromString)
@@ -32,7 +32,7 @@ import Data.UUID.V7 ( UUID, genUUID )
 import Schema.Mutations.InsertBankOne (InsertBankOne (InsertBankOne), object, InsertBankOneArgs (InsertBankOneArgs))
 
 class (Monad m, MonadIO m) => GraphQLMonad m where
-    insertExpenses :: [Expense] -> m (ResponseStream InsertExpenses)
+    insertExpenses :: [Sc.Expense] -> m (ResponseStream InsertExpenses)
     fromExpense :: Sc.Expense -> m Expenses_insert_input
     --upsertBank :: Sc.Bank -> m (ResponseStream InsertBankOne)
 

@@ -7,7 +7,6 @@ module ScrapperBuilder where
 
 import GHC.Generics
 
-
 data (Show a) => Scrapper a b = Scrapper 
     { scrapperSource :: a 
     , scrapperParser :: a -> Maybe b

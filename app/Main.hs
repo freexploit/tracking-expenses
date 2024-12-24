@@ -9,6 +9,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE LambdaCase #-}
 
 import App
 import AppEnv
@@ -63,8 +64,7 @@ proccessEmails mail days mailboxname = do
 
   let scrapper = flip mkScrapper parseExpense
 
-  expenses <- forM mails \m -> do
-    case m of
+  expenses <- forM mails <| \case 
       Right t -> do
         let input = proccesHtml <$> t
         let expense = (runScrapper <. scrapper) (fromJust input)

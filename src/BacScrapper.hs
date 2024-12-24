@@ -1,11 +1,7 @@
 {-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE RecordWildCards #-}
 
 module BacScrapper where
 
@@ -23,37 +19,6 @@ import Text.Read (readMaybe)
 import Text.Regex.TDFA
 import Text.StringLike (toString)
 import Types
-
-
-data Bank = Bank
-  { _bank_name :: Maybe String,
-    _bank_location :: Maybe String,
-    _bank_email :: Maybe String
-  }
-  deriving (Show, Generic, Eq)
-
-data Commerce = Commerce
-  { _commerce_name :: Maybe String,
-    _commerce_location :: Maybe String
-  }
-  deriving (Show, Generic, Eq)
-
-data Expense = Expense
-  { _commerce :: Maybe Commerce,
-    _bank :: Maybe Bank,
-    _currency :: Maybe B.ByteString,
-    _amount :: Maybe Double,
-    _card :: Maybe CardType,
-    _card_number :: Maybe B.ByteString,
-    _date :: Maybe UTCTime
-  }
-  deriving (Show, Generic, Eq)
-
-makeLenses ''Expense
-makeLenses ''Bank
-makeLenses ''Commerce
-
-
 
 containsSubstring :: String -> [String] -> Bool
 containsSubstring sub = any (sub `isInfixOf`)

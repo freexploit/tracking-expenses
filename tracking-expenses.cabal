@@ -30,11 +30,15 @@ test-suite spec
       base
     , hspec
     , hspec-core
+    , bytestring
     , hspec-contrib
+    , regex-tdfa
     , HUnit 
     , QuickCheck
     , tracking-expenses
   ghc-options:         -Wall -Werror
+  other-modules:
+      BancoChileScrapperSpec
   build-tool-depends:
       hspec-discover:hspec-discover
   default-language:    Haskell2010
@@ -44,6 +48,8 @@ library
     build-depends:    
        base ^>=4.18.2.1
         , geojson
+        , regex-tdfa
+        , regex-base
         , HaskellNet
         , network
         , mtl
@@ -75,6 +81,7 @@ library
         Config
         Cli
         BacScrapper
+        BancoChileScrapper
         ScrapperBuilder
         AppEnv
         Graphql
