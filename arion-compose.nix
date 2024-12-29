@@ -6,7 +6,7 @@
 
   services = rec {
     db.service = {
-        image = "postgis/postgis:17-3.5";
+        image = "postgis/postgis:16-3.5";
         container_name = "hasura_db";
         networks = [ "hasura" ];
         ports = ["5432:5432"];
